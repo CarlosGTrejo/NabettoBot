@@ -1,6 +1,6 @@
 {
     "USER":"nabettobot",
-    "PASS":"oauth:7y9r55qlrnnsjvmv6b7d6bbm7o4uj0",
+    "PASS":null,
     "HOST":"twitch.tv",
     "PORT":"6667",
     "CHANNEL":"test"
