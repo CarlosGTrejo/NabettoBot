@@ -1,7 +1,7 @@
 {
     "USER":"nabettobot",
     "PASS":null,
-    "HOST":"twitch.tv",
-    "PORT":"6667",
-    "CHANNEL":"test"
+    "HOST":"irc.twitch.tv",
+    "PORT":6667,
+    "CHANNEL":"nabettobot"
 }
