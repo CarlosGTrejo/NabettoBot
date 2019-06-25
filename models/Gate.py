@@ -3,19 +3,12 @@ from models.Fetch import fetchSettings
 
 settings = fetchSettings()
 
-def openGate() -> "Socket Obj":
+def openGate():
     gate = socket.socket()
     gate.connect((settings.HOST, settings.PORT))
-    CREDENTIALS = ("PASS " + settings.PASS + "\r\n"+\
-                   "NICK " + settings.USER + "\r\n").encode()
-                       
-    CHANNEL     = ("JOIN " + settings.CHANNEL + "\r\n").encode()
-    gate.send(CREDENTIALS)
-    gate.send(CHANNEL)
+    gate.send("PASS " + settings.PASS + "\r\n")
+    gate.send("NICK " + settings.USER + "\r\n")
+    gate.send("JOIN " + settings.CHANNEL + "\r\n")
     
     return gate
 
-def sendMessage(gate, msg):
-    envelope = ("PRIVMSG #" + settings.CHANNEL + " :" + msg + "\r\n").encode()
-    gate.send(envelope)
-    print("Sent: " + msg)
