@@ -16,14 +16,14 @@ def openConnection() -> "Socket Obj":
     
     return sock
 
-def sendMessage(gate, msg):
+def sendMessage(connection, msg):
     envelope = ("PRIVMSG #" + settings.CHANNEL + " :" + msg + "\r\n").encode()
-    gate.send(envelope)
+    connection.send(envelope)
     print("Sent: " + msg)
 
-def fetchMessages(gate) -> "Message Stack":
+def fetchMessages(connection) -> "Message Stack":
     global buffer
-    buffer = buffer + gate.recv(1024).decode()
+    buffer = buffer + connection.recv(1024).decode()
     tmp = buffer.split("\n")
     buffer = tmp.pop()
 

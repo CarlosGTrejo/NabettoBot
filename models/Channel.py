@@ -1,11 +1,11 @@
-from models.Gate import sendMessage
+from models.Connection import sendMessage
 
-def joinChannel(gate):
+def joinChannel(connection):
     buffer = ""
     Loading = True
 
     while Loading:
-        buffer = buffer + gate.recv(1024).decode()
+        buffer = buffer + connection.recv(1024).decode()
         tmp = buffer.split("\n")
         buffer = tmp.pop()
 
