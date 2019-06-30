@@ -1,15 +1,15 @@
-from models.Gate import openGate, fetchMessages
+from models.Connection import openConnection, fetchMessages
 from models.Channel import joinChannel
 from models.Data import gatherData, timer
 
-gate = openGate()
-joinChannel(gate)
+connection = openConnection()
+joinChannel(connection)
 
 alive = True
 
 start = None
 while alive:
-    messages = fetchMessages(gate)
+    messages = fetchMessages(connection)
 
     for line in messages:
         if "Bet complete" in line:
