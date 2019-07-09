@@ -11,7 +11,7 @@ def majorityBet(bets, current_amount):
     current amount of money the owner has."""
     
     blue, red = 0, 0 # assume bet cannot be a negative number
-    final_bet_amount: "Current amount * 0.1" = current_amount * 0.1
+    final_bet_amount: "Current amount * 0.1" = current_amount * 0.1 # each bet is 10% of the total amount owned
 
     # Sort and add bets to two baskets: red and blue
     for bet in bets:
