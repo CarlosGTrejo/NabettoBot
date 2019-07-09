@@ -1,4 +1,4 @@
-from models.Bet import Bet
+from models.Bet import Bet, majorityBet
 from random import choice, randint
 
 
@@ -12,4 +12,4 @@ for i in range(10):
 for item in test:
     print(item.user, item.team, item.bet_amount)
 
-print(type(item))
+print(majorityBet(test, 10000))

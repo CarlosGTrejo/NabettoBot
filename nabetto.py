@@ -1,6 +1,7 @@
 from models.Connection import openConnection, fetchMessages
 from models.Channel import joinChannel
 from models.Data import gatherData, timer
+from models.Bet import Bet, majorityBet
 
 connection = openConnection()
 joinChannel(connection)
@@ -8,6 +9,7 @@ joinChannel(connection)
 alive = True
 
 start = None
+
 while alive:
     messages = fetchMessages(connection)
 
