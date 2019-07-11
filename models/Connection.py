@@ -1,5 +1,6 @@
 import socket
 from models.Fetch import fetchSettings
+from time import sleep, perf_counter
 
 settings = fetchSettings()
 buffer = ""
@@ -16,6 +17,11 @@ def openConnection() -> "Socket Obj":
     
     return sock
 
+def keepAlive(connection) -> "Keep connection alive":
+    pong = ("PONG: tmi.twitch.tv\r\n").encode()
+    connection.send(pong)
+    sendMessage(connection, "PONG SENT!")
+
 def sendMessage(connection, msg):
     envelope = ("PRIVMSG #" + settings.CHANNEL + " :" + msg + "\r\n").encode()
     connection.send(envelope)
@@ -28,3 +34,4 @@ def fetchMessages(connection) -> "Message Stack":
     buffer = tmp.pop()
 
     return tmp
+
