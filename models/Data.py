@@ -50,13 +50,4 @@ def gatherData(msg,timestamp):
     
     return line
 
-def betExtract(message):
-    split_point: "Point to split the message" = "PRIVMSG #" + fetchSettings().CHANNEL + " :"
-    # Extract username
-    username = message.split(split_point)[0].split("!")[0].strip(":")
-    # Extract team
-    team = "BLUE" if "blue" in message else "RED"
-    # Extract amount
-    amount = int(message.split('-').pop().split('.').pop(0).split(', ')[1])
-    
-    return [username, team, amount]
+

@@ -13,7 +13,7 @@ def betExtract(message):
     # Extract username
     username = message.split(split_point)[0].split("!")[0].strip(":")
     # Extract team
-    team = "BLUE" if "blue" in message else "RED"
+    team = "BLUE" if "BLUE" in message else "RED"
     # Extract amount
     amount = int(message.split('-').pop().split('.').pop(0).split(', ')[1])
     return [username, team, amount]
@@ -39,3 +39,17 @@ def majorityBet(bets, current_amount):
         return "!blue " + str(int(final_bet_amount)) # convert the bet amount to an int because the betting bot only accepts whole numbers
     else:
         return "!red " + str(int(final_bet_amount)) 
+
+def sideWithMoreMoney(bets):
+
+    blue, red = 0, 0 # assume bet cannot be a negative number
+
+    # Sort and add bets to two baskets: red and blue
+    for bet in bets:
+        if (bet.team == "BLUE"):
+            blue += bet.bet_amount  
+        else:
+            red += bet.bet_amount
+
+    # Make the final betting decision based on the majority bet
+    print("BLUE:", blue, "RED:", red)
