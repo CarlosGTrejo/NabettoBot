@@ -3,8 +3,7 @@ from random import choice
 
 from models.Connection import openConnection, fetchMessages, sendMessage, keepAlive
 from models.Channel import joinChannel
-# from models.Data import betExtract
-from functions.Bet import Bet, betExtract, majorityBet, sideWithMoreMoney
+from functions.Bet import Bet, betExtract, majorityBet, minorityBet, sideWithMoreMoney
 from functions.Client import messageFormat, messageClear
 
 
@@ -44,9 +43,9 @@ def main():
             else:    
                 print(perf_counter(), message)
 
-            if (time() - timer_start > 120 and bet_start == True):
+            if (time() - timer_start > 180 and bet_start == True):
                 sideWithMoreMoney(bet_data)
-                sendMessage(connection, majorityBet(bet_data, 10000))
+                sendMessage(connection, minorityBet(bet_data, 10000))
                 sleep(100)
                 bet_done = True
 
@@ -64,5 +63,6 @@ def main():
         # connection_time = time() - one_point_time 
         if(bet_done == True): # Reset main after each bet session
             messageClear()
+            print("===========MESSAGE CLEARED===========")
             main()
 main()
