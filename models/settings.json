@@ -1,6 +1,6 @@
 {
-    "USER":"nabettobot",
-    "PASS":null,
+    "USER":"vgfan1996",
+    "PASS":"oauth:2hw7cswubahxvm0v10sz2lj9c8ubif",
     "HOST":"irc.twitch.tv",
     "PORT":6667,
     "CHANNEL":"saltyteemo"

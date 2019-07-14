@@ -1,6 +1,7 @@
 import csv
 from glob import glob as isfile
 from time import time
+from models.Fetch import fetchSettings
 
 def nGen() -> str(int):
     "number generator"
@@ -48,3 +49,5 @@ def gatherData(msg,timestamp):
         db.writerow(line)
     
     return line
+
+
