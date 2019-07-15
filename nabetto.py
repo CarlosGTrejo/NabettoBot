@@ -27,26 +27,29 @@ def main():
         
         # Read each message 
         for message in messages:
+
+            # Begin a betting session when "Bet complete is first detected."
             if ("Bet complete" in message):
-                if (bet_start == False):
+                if (bet_start == False): 
                     print("===========BETTING SESSION STARTED===========")
                     bet_start = True
                     timer_start = time()
-                    temp = betExtract(message)
-                    bet_data.append(Bet(temp[0], temp[1], temp[2]))
-                    print((time() - timer_start), temp)
+                    betExtracted = betExtract(message)
+                    bet_data.append(Bet(betExtracted[0], betExtracted[1], betExtracted[2]))
+                    print((time() - timer_start), betExtracted)
                 else:
-                    temp = betExtract(message)
-                    bet_data.append(Bet(temp[0], temp[1], temp[2]))
-                    print((time() - timer_start), temp)
+                    betExtracted = betExtract(message)
+                    bet_data.append(Bet(betExtracted[0], betExtracted[1], betExtracted[2]))
+                    print((time() - timer_start), betExtracted)
 
-            else:    
+            # Just print messages when there is no bet session
+            elif (bet_start == False): 
                 print(perf_counter(), message)
 
             if (time() - timer_start > 180 and bet_start == True):
                 sideWithMoreMoney(bet_data)
-                sendMessage(connection, minorityBet(bet_data, 10000))
-                sleep(100)
+                sendMessage(connection, majorityBet(bet_data, 10000))
+                sleep(100) # Just to make sure don't do anything until a bet session is completed
                 bet_done = True
 
             # elif ("Betting has ended" in message):
@@ -58,11 +61,12 @@ def main():
             if "PING" in message: # Send out a pong message every time there's a PING
                 keepAlive(connection)
 
-        # Temporary: Renew connection every hour and only do so when a betting session has not started yet
-        # time_difference: "Deta of beginning_time and time()" = round(abs(connection_time - previous_connection_time), 3)
-        # connection_time = time() - one_point_time 
-        if(bet_done == True): # Reset main after each bet session
+        if(bet_done == True): # Reset main after each bet session to refresh connection and everything
             messageClear()
             print("===========MESSAGE CLEARED===========")
+            sideWithMoreMoney(bet_data)
             main()
+
+            
+                
 main()
