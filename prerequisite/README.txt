@@ -1,0 +1,1 @@
+Make sure to install tesseract-ocr from the official website.

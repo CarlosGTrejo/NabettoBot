@@ -5,21 +5,24 @@ from models.Connection import openConnection, fetchMessages, sendMessage, keepAl
 from models.Channel import joinChannel
 from functions.Bet import Bet, betExtract, majorityBet, minorityBet, sideWithMoreMoney
 from functions.Client import messageFormat, messageClear
+from ocr.ocr import currentServer
 
+current_balance = 0
 
 def main():
 
     # Variables for betting
+    global current_balance 
     current_balance = 0
     bet_start = False
     bet_done = False
     bet_data = [] # a Bet class list stores bet data collected and fetches itself to majorityBet
     timer_start = 0 # marked
-
+    # @vgfan1996 - Bet complete for BLUE, 1000.
     # Opening a new connection
     connection = openConnection()
     joinChannel(connection)
-    alive = True # If true, the bot is alive
+    # alive = True # If true, the bot is alive
 
     # Turn on the bot, begin fetching messages for analysis
     while True:
@@ -45,6 +48,8 @@ def main():
             # Just print messages when there is no bet session
             elif (bet_start == False): 
                 print(perf_counter(), message)
+                if (perf_counter() % 7200 < 5): # Collect shrooms every 2 hours
+                    sendMessage(connection, "!farm")
 
             if (time() - timer_start > 180 and bet_start == True):
                 sideWithMoreMoney(bet_data)
@@ -64,6 +69,7 @@ def main():
         if(bet_done == True): # Reset main after each bet session to refresh connection and everything
             messageClear()
             print("===========MESSAGE CLEARED===========")
+            print("Current server:", currentServer())
             sideWithMoreMoney(bet_data)
             main()
 
