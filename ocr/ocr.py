@@ -31,16 +31,16 @@ def victoryTeam():
     else:
         return "Blue"
 
-def detectLoadingScreen():
-    """This function uses OCR to detect League loading screen."""
-    # Take a screenshot and use OCR to extract the victory team
-    x1, y1, x2, y2 = 345, 1065, 385, 1080
-    img = ImageGrab.grab(bbox=(x1, y1, x2, y2)) # Ideal 310 x 50
-    pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract' # Tesseract location
-    text = pytesseract.image_to_string(img, lang = 'eng')
+# def detectLoadingScreen():
+#     """This function uses OCR to detect League loading screen."""
+#     # Take a screenshot and use OCR to extract the victory team
+#     x1, y1, x2, y2 = 345, 1065, 385, 1080
+#     img = ImageGrab.grab(bbox=(x1, y1, x2, y2)) # Ideal 310 x 50
+#     pytesseract.pytesseract.tesseract_cmd = r'C:\\Program Files\\Tesseract-OCR\\tesseract' # Tesseract location
+#     text = pytesseract.image_to_string(img, lang = 'eng')
     
 
-detectLoadingScreen()
+# detectLoadingScreen()
 
 # def players():
 #     Take a screenshot and use OCR to extract the victory team
@@ -51,3 +51,5 @@ detectLoadingScreen()
 #     text = pytesseract.image_to_string(img, lang = 'eng')
 #     print(text)
 
+def betTimer():
+    pass
