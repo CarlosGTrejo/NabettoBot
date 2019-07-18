@@ -17,7 +17,10 @@ def openConnection() -> "Socket Obj":
     
     return sock
 
-def keepAlive(connection) -> "Keep connection alive":
+def keepAlive(connection):
+    """
+    Keeps connection alive by sending 'PING' message
+    """
     pong = bytes('PONG :tmi.twitch.tv\r\n', 'UTF-8')
     connection.send(pong)
     print("=======================\nPONG SENT!\n=======================")
