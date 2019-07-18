@@ -13,7 +13,7 @@ def betExtract(message) -> ["username", "team", "amount"]:
     """This function extracts data from messages and return a list that has all the data."""
     split_point: "Point to split the message" = "PRIVMSG #" + fetchSettings().CHANNEL + " :"
     # Extract username
-    username = message.split(split_point)[0].split("!")[0].strip(":")
+    username = message.split(split_point)[1].split("@")[1].split(" - ")[0]
     # Extract team
     team = "BLUE" if "BLUE" in message else "RED"
     # Extract amount
