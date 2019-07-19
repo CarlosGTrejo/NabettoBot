@@ -16,7 +16,7 @@ def joinChannel(connection):
                 Loading = False
     
     else: # ⬇️ When done loading ⬇️
-        print("[+] Successfully joined channel.\n======================================================================")
+        print("[+] Successfully joined channel.\n".ljust(60,'='))
         
         # sendMessage(gate, "Successfully joined channel.")
         
