@@ -36,7 +36,7 @@ def main():
 
                 bet_info = betExtract(message,start=timer_start)
                 # bet_data.append(Bet(*bet_info))
-                bet_data += bet_info,
+                bet_data += Bet(*bet_info),
 
             else:
                 print(perf_counter(), message)
