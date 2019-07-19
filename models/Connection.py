@@ -23,7 +23,7 @@ def keepAlive(connection):
     """
     pong = bytes('PONG :tmi.twitch.tv\r\n', 'UTF-8')
     connection.send(pong)
-    print("=======================\nPONG SENT!\n=======================")
+    print("\nPONG SENT!\n".center(60, '='))
 
 def fetchMessages(connection) -> "Message Stack":
     global buffer

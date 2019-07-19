@@ -1,5 +1,8 @@
 import csv, logging
 from io import StringIO
+from time import time
+
+
 
 class CsvFormatter(logging.Formatter):
     def __init__(self):
@@ -18,14 +21,15 @@ class CsvFormatter(logging.Formatter):
 
 def LogData(function):
     """
-    Extracts team, shroom amount, and timestamp data from a bet message.
+    Extracts team, shroom amount, and timestamp data from a bet message into bets.csv
     """
     logging.basicConfig(level=logging.DEBUG,filename="bets.csv")
     logger = logging.getLogger(__name__)
     logging.root.handlers[0].setFormatter(CsvFormatter())
 
-    def wrapper(message):
+    def wrapper(message,start):
         output = function(message)
         logging.info(output)
+        print((time()-start),output,sep='\t')
         return output
     return wrapper

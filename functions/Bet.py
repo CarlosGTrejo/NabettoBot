@@ -4,12 +4,12 @@ from functions.Data import LogData
 class Bet:
     """The class stores all basic information collected from each betting session."""
     def __init__(self, user, team, bet_amount): # Constructor
-        self.user: "Bet person" = user
-        self.team: "Team the person bet" = team
+        self.user: "Person that placed the bet" = user
+        self.team: "Team the person bet on" = team
         self.bet_amount: "Amount person bet" = bet_amount
 
 @LogData
-def betExtract(message) -> ["username", "team", "amount"]:
+def betExtract(message) -> ("username", "team", "amount"):
     """This function extracts data from messages and return a list that has all the data."""
     split_point: "Point to split the message" = "PRIVMSG #" + fetchSettings().CHANNEL + " :"
     # Extract username
@@ -18,7 +18,7 @@ def betExtract(message) -> ["username", "team", "amount"]:
     team = "BLUE" if "BLUE" in message else "RED"
     # Extract amount
     amount = int(message.split('-').pop().split('.').pop(0).split(', ')[1])
-    return [username, team, amount]
+    return (username, team, amount)
 
 
 def majorityBet(bets, current_amount):

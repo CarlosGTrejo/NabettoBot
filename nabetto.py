@@ -1,4 +1,4 @@
-from time import time, sleep, perf_counter, process_time
+from time import time, sleep, perf_counter
 from random import choice
 
 from models.Connection import openConnection, fetchMessages, sendMessage, keepAlive
@@ -29,25 +29,21 @@ def main():
         # Read each message 
         for message in messages:
             if ("Bet complete" in message):
-                if (bet_start == False):
-                    print("===========BETTING SESSION STARTED===========")
+                if (bet_start == False): # Creates timestamp for the beginning of the betting session.
+                    print("BETTING SESSION STARTED".center(60, '='))
                     bet_start = True
                     timer_start = time()
-                    temp = betExtract(message)
-                    bet_data.append(Bet(temp[0], temp[1], temp[2]))
-                    print((time() - timer_start), temp)
-                else:
-                    temp = betExtract(message)
-                    bet_data.append(Bet(temp[0], temp[1], temp[2]))
-                    print((time() - timer_start), temp)
 
-            else:    
+                bet_info = betExtract(message,start=timer_start)
+                bet_data.append(Bet(*bet_info))
+
+            else:
                 print(perf_counter(), message)
 
-            if (time() - timer_start > 120 and bet_start == True):
+            if (time() - timer_start > 180 and bet_start == True):
                 sideWithMoreMoney(bet_data)
                 sendMessage(connection, majorityBet(bet_data, 10000))
-                sleep(100)
+                sleep(50)
                 bet_done = True
 
             # elif ("Betting has ended" in message):
