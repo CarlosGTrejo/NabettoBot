@@ -12,7 +12,7 @@ class CsvFormatter(logging.Formatter):
 
     def format(self, record):
         self.datefmt = '%Y-%m-%d %H:%M:%S'
-        self.writer.writerow([self.formatTime(record, self.datefmt)]+record.msg)
+        self.writer.writerow((self.formatTime(record, self.datefmt),)+record.msg)
 
         data = self.output.getvalue()
         self.output.truncate(0)

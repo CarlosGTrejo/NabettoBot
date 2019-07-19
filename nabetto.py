@@ -14,7 +14,7 @@ def main():
     current_balance = 0
     bet_start = False
     bet_done = False
-    bet_data = [] # a Bet class list stores bet data collected and fetches itself to majorityBet
+    bet_data = () # a Bet class list stores bet data collected and fetches itself to majorityBet
     timer_start = 0 # marked
 
     # Opening a new connection
@@ -35,7 +35,8 @@ def main():
                     timer_start = time()
 
                 bet_info = betExtract(message,start=timer_start)
-                bet_data.append(Bet(*bet_info))
+                # bet_data.append(Bet(*bet_info))
+                bet_data += bet_info,
 
             else:
                 print(perf_counter(), message)
