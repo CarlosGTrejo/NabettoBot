@@ -45,9 +45,9 @@ def debug(function):
         args_list   = [repr(arg) for arg in args]
         kwargs_list = [f"{k}={v!r}" for k,v in kwargs.items()]
         signature = ", ".join(args_list + kwargs_list)           # 3
-        print(f"\x1b[30m\x1b[106m[94mCalling {function.__name__}({signature})")
+        print(f"\x1b[30m\x1b[102mCalling {function.__name__}({signature})")
         output = function(*args, **kwargs)
-        print(f"\x1b[30m\x1b[106m[94m{function.__name__!r} returned {output!r}")
+        print(f"\x1b[30m\x1b[102m{function.__name__!r} returned {output!r}")
         return output
     return wrapper
 
