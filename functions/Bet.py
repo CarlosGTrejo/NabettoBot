@@ -1,5 +1,6 @@
-from models.Fetch import fetchSettings
+from models.Connection import settings
 from functions.Tools import logData
+
 
 class Bet:
     """The class stores all basic information collected from each betting session."""
@@ -11,7 +12,7 @@ class Bet:
 @logData
 def betExtract(message) -> ("username", "team", "amount"):
     """This function extracts data from messages and return a tuple that has all the data."""
-    split_point: "Point to split the message" = "PRIVMSG #" + fetchSettings().CHANNEL + " :"
+    split_point: "Point to split the message" = "PRIVMSG #" + settings.CHANNEL + " :"
     # Extract username
     username = message.split(split_point)[1].split("@")[1].split(" - ")[0]
     # Extract team
