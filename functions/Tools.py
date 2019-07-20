@@ -1,6 +1,7 @@
 import csv, logging
 from io import StringIO
 from time import time
+from functools import wraps
 
 
 
@@ -19,17 +20,35 @@ class CsvFormatter(logging.Formatter):
         self.output.seek(0)
         return data.strip()
 
-def LogData(function):
+def logData(function):
     """
     Extracts team, shroom amount, and timestamp data from a bet message into bets.csv
     """
     logging.basicConfig(level=logging.DEBUG,filename="bets.csv")
     logger = logging.getLogger(__name__)
     logging.root.handlers[0].setFormatter(CsvFormatter())
-
+    
+    @wraps(function)
     def wrapper(message,start):
         output = function(message)
         logging.info(output)
         print((time()-start),output,sep='\t')
         return output
     return wrapper
+
+def debug(function):
+    """
+    Displays what function ran, what arguments were passed, the output, and exceptions
+    """
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        args_list   = [repr(arg) for arg in args]
+        kwargs_list = [f"{k}={v!r}" for k,v in kwargs.items()]
+        signature = ", ".join(args_list + kwargs_list)           # 3
+        print(f"Calling {function.__name__}({signature})")
+        output = function(*args, **kwargs)
+        print(f"{function.__name__!r} returned {output!r}")
+        return output
+    return wrapper
+
+
