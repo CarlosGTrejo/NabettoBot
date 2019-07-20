@@ -10,7 +10,6 @@ from ocr.ocr import currentServer
 current_balance = 0
 
 def main():
-
     # Variables for betting
     global current_balance 
     current_balance = 0
