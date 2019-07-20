@@ -1,12 +1,15 @@
 from time import time, sleep, perf_counter
 from random import choice
 
+from colorama import init
+
 from models.Connection import openConnection, fetchMessages, sendMessage, keepAlive
 from models.Channel import joinChannel
 # from models.Data import betExtract
 from functions.Bet import Bet, betExtract, majorityBet, sideWithMoreMoney
 from functions.Client import messageFormat, messageClear
 
+init(autoreset=True, convert=True)
 
 def main():
 
@@ -39,7 +42,7 @@ def main():
                 bet_data += Bet(*bet_info),
 
             else:
-                print(perf_counter(), message)
+                print(perf_counter(), messageFormat(message))
 
             if (time() - timer_start > 180 and bet_start == True):
                 sideWithMoreMoney(bet_data)
