@@ -1,6 +1,8 @@
 import socket
-from models.Fetch import fetchSettings
 from threading import Timer
+
+from functions.Tools import debug
+from models.Fetch import fetchSettings
 
 settings = fetchSettings()
 buffer = ""
@@ -17,13 +19,18 @@ def openConnection() -> "Socket Obj":
     
     return sock
 
-def keepAlive(connection):
+def keepAlive(connection) -> "Thread Obj":
     """
-    Keeps connection alive by sending 'PING' message
+    Keeps connection alive by sending 'PING' message to server.
     """
-    pong = bytes('PONG :tmi.twitch.tv\r\n', 'UTF-8')
-    connection.send(pong)
-    print("\nPONG SENT!\n".center(60, '='))
+    PING = "PING :tmi.twitch.tv\r\n".encode()
+    connection.send(PING)
+    t = Timer(120, keepAlive, [connection])
+    t.daemon = True; t.start()
+    print("\x1b[107m\x1b[94m\n\t[*] PING Sent\t\n")
+
+#TODO: def reconnect(connection):
+    
 
 def fetchMessages(connection) -> "Message Stack":
     global buffer
@@ -31,7 +38,7 @@ def fetchMessages(connection) -> "Message Stack":
     tmp = buffer.split("\n")
     buffer = tmp.pop()
     return tmp
-
+@debug
 def sendMessage(connection, msg):
     envelope = ("PRIVMSG #" + settings.CHANNEL + " :" + msg + "\r\n").encode()
     connection.send(envelope)

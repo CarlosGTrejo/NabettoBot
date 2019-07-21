@@ -2,9 +2,9 @@
 Retrieves variable values from settings.json and oauth key from environment variables if not present in settings.json
 """
 import json
-from types import SimpleNamespace
 from os import getenv
-from os.path import dirname,abspath
+from os.path import abspath, dirname
+from types import SimpleNamespace
 
 path = dirname(abspath(__file__)) + '\\'
 

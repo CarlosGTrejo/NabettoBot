@@ -1,8 +1,8 @@
-import csv, logging
+import csv
+import logging
+from functools import wraps
 from io import StringIO
 from time import time
-from functools import wraps
-
 
 
 class CsvFormatter(logging.Formatter):
@@ -50,5 +50,3 @@ def debug(function):
         print(f"\x1b[30m\x1b[102m{function.__name__!r} returned {output!r}")
         return output
     return wrapper
-
-

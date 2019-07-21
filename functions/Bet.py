@@ -1,5 +1,5 @@
-from models.Connection import settings
 from functions.Tools import logData
+from models.Connection import settings
 
 
 class Bet:
