@@ -29,8 +29,9 @@ def keepAlive(connection) -> "Thread Obj":
     t.daemon = True; t.start()
     print("\x1b[107m\x1b[94m\n\t[*] PING Sent\t\n")
 
-#TODO: def reconnect(connection):
-    
+#@todo Create reconnect function
+#@body The reconnect function should go through the same process as connecting for the first time.
+#https://dev.twitch.tv/docs/irc/guide/#re-connecting-to-twitch-irc
 
 def fetchMessages(connection) -> "Message Stack":
     global buffer
