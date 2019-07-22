@@ -1,5 +1,6 @@
 from random import choice
-from time import perf_counter, sleep, time
+from time import perf_counter, sleep, time, strftime
+from datetime import timedelta
 from traceback import format_exc
 from winsound import Beep
 
@@ -53,7 +54,8 @@ def main():
                 # bet_data += Bet(*bet_info),
 
             else:
-                print(f"{perf_counter():.3f}", messageFormat(message))
+                counter = int(perf_counter())
+                print(timedelta(seconds = counter), messageFormat(message))
 
             # if (time() - timer_start > 180 and bet_start == True):
             #     sideWithMoreMoney(bet_data)
