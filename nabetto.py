@@ -1,7 +1,11 @@
 from random import choice
-from time import perf_counter, sleep, time
+from time import sleep, time
+from datetime import timedelta
 from traceback import format_exc
-from winsound import Beep
+
+from sys import platform
+
+if platform == "win32": from winsound import Beep
 
 from colorama import deinit, init
 
@@ -12,9 +16,7 @@ from models.Connection import (fetchMessages, keepAlive, openConnection,
                                sendMessage)
 
 sequence = (293,113), (293,113), (586,226), (440,226)
-
-init(autoreset=True, convert=True)
-
+init(autoreset=True)#, convert=True)
 
 def main():
 
@@ -53,7 +55,8 @@ def main():
                 # bet_data += Bet(*bet_info),
 
             else:
-                print(f"{perf_counter():.3f}", messageFormat(message))
+                counter = int(perf_counter())
+                print(timedelta(seconds = counter), messageFormat(message))
 
             # if (time() - timer_start > 180 and bet_start == True):
             #     sideWithMoreMoney(bet_data)
@@ -77,11 +80,15 @@ def main():
         #     messageClear()
 
 try:
+    time_origin = time()
+    perf_counter = lambda: time() - time_origin
     main()
 except KeyboardInterrupt:
     print("\x1b[96m[.] Exitting...")
     deinit()
 except Exception as e:
-    for n in sequence: Beep(*n)
-    print('\a',end='\r') # 3-Bell Sound Notification
+    if platform == 'win32':
+        for n in sequence: Beep(*n) # Notify the user that an exception has happened using sound notification
+    else:
+        print('\a',end='\r'); sleep(.5); print('\a', end='\r') # Notify the user that an exception has happened using sound notification
     print(f"\x1b[107m\x1b[91m[!] Exception: {e}\nInfo: {format_exc()}")
