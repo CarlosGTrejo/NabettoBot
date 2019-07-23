@@ -12,7 +12,7 @@ LABEL Name=nabettobot Version=0.0.1
 EXPOSE 6667
 
 WORKDIR /NabettoBot
-ADD . /NabettoBot
+COPY . /NabettoBot
 
 # Using pip:
 RUN python3 -m pip install -r requirements.txt
