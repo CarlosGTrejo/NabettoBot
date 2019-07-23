@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+  nabettobot:
+    image: nabettobot
+    build: .
+    ports:
+      - 6667:6667

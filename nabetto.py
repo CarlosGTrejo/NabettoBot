@@ -1,8 +1,12 @@
 from random import choice
-from time import perf_counter, sleep, time, strftime
+from time import perf_counter, sleep, time
 from datetime import timedelta
 from traceback import format_exc
-from winsound import Beep
+
+from sys import platform
+
+if platform in ("linux", "linux2"): from os import system; Beep = lambda d, f: system(f"play -nq -t alsa synth {d} sine {f}")
+else: from winsound import Beep
 
 from colorama import deinit, init
 

@@ -6,7 +6,7 @@ from os import getenv
 from os.path import abspath, dirname
 from types import SimpleNamespace
 
-path = dirname(abspath(__file__)) + '\\'
+path = dirname(abspath(__file__)) + '/'
 
 def fetchSettings(name: "Json File"= "settings.json", path: "Json file parent folder path"=path) -> "settings obj":
     """

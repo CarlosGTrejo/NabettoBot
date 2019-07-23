@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  nabettobot:
+    image: nabettobot
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 6667:6667

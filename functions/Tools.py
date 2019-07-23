@@ -31,7 +31,7 @@ def logData(function):
     @wraps(function)
     def wrapper(message,start):
         output = function(message)
-        logging.info(output)
+        logger.info(output)
         print((time()-start),output,sep='\t')
         return output
     return wrapper
