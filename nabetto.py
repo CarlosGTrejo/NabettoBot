@@ -8,7 +8,7 @@ from colorama import deinit, init
 # from functions.Bet import Bet, betExtract, majorityBet, sideWithMoreMoney
 from functions.Client import messageFormat
 from models.Channel import joinChannel
-from models.Connection import (fetchMessages, keepAlive, openConnection)
+from models.Connection import (fetchMessages, openConnection)
 
 if platform == "win32": from winsound import Beep
 
@@ -44,7 +44,7 @@ def main():
                 if (bet_start == False): # Creates timestamp for the beginning of the betting session.
                     print("BETTING SESSION STARTED".center(60, '='))
                     bet_start = True
-                    timer_start = time()
+                    # timer_start = time()
 
                 # bet_info = betExtract(message,start=timer_start)
                 # bet_data.append(Bet(*bet_info))

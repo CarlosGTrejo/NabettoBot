@@ -33,7 +33,7 @@ def majorityBet(bets, current_amount):
     # Sort and add bets to two baskets: red and blue
     for bet in bets:
         if (bet.team == "BLUE"):
-            blue += bet.bet_amount  
+            blue += bet.bet_amount
         else:
             red += bet.bet_amount
 
