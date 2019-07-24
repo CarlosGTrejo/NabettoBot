@@ -19,9 +19,8 @@ def main():
 
     # Variables for betting
     bet_start = False
-    bet_done = False
-    bet_data = () # a Bet class list stores bet data collected and fetches itself to majorityBet
-    timer_start = 0 # marked
+    # bet_done = False
+    # bet_data = () # a Bet class list stores bet data collected and fetches itself to majorityBet
     PONG = "PONG :tmi.twitch.tv\r\n".encode()
 
     # Opening a new connection
