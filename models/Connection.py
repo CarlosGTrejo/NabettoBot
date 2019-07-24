@@ -12,7 +12,7 @@ def openConnection() -> "Socket Obj":
     sock.connect((settings.HOST, settings.PORT))
     CREDENTIALS = ("PASS " + settings.PASS + "\r\n"+\
                    "NICK " + settings.USER + "\r\n").encode()
-                       
+
     CHANNEL     = ("JOIN #"+ settings.CHANNEL + "\r\n").encode()
     sock.send(CREDENTIALS)
     sock.send(CHANNEL)

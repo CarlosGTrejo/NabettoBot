@@ -1,7 +1,7 @@
-from os import system
 from random import choice
 
 from models.Connection import settings
+
 
 def messageFormat(message) -> 'random_color + "username: message"': # Currently disabled due to unidentified error
     """This function reformat messages received from connection to a more readable form."""

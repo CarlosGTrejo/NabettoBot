@@ -9,9 +9,7 @@ def joinChannel(connection):
 
         for line in tmp:
             print(line)
-            
-            if ("End of /NAMES list" in line):
-                break
 
-    else: # ⬇️ When done loading ⬇️
-        print("[+] Successfully joined channel.\n".ljust(60,'='))
+            if ("End of /NAMES list" in line):
+                Loading = False
+                print("[+] Successfully joined channel.\n".ljust(60,'='))
