@@ -1,19 +1,16 @@
-from random import choice
-from time import sleep, time
 from datetime import timedelta
-from traceback import format_exc
-
 from sys import platform
-
-if platform == "win32": from winsound import Beep
+from time import sleep, time
+from traceback import format_exc
 
 from colorama import deinit, init
 
-from functions.Bet import Bet, betExtract, majorityBet, sideWithMoreMoney
-from functions.Client import messageClear, messageFormat
+# from functions.Bet import Bet, betExtract, majorityBet, sideWithMoreMoney
+from functions.Client import messageFormat
 from models.Channel import joinChannel
-from models.Connection import (fetchMessages, keepAlive, openConnection,
-                               sendMessage)
+from models.Connection import (fetchMessages, keepAlive, openConnection)
+
+if platform == "win32": from winsound import Beep
 
 sequence = (293,113), (293,113), (586,226), (440,226)
 init(autoreset=True)#, convert=True)
