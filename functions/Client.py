@@ -3,7 +3,6 @@ from random import choice
 
 from models.Connection import settings
 
-
 def messageFormat(message) -> 'random_color + "username: message"': # Currently disabled due to unidentified error
     """This function reformat messages received from connection to a more readable form."""
     if any([P in message for P in ("PING", "PONG")]):
@@ -15,7 +14,3 @@ def messageFormat(message) -> 'random_color + "username: message"': # Currently 
         message_text = message.split(split_point)[1]
 
         return f"{choice(colors)}{username}: {message_text}"
-
-
-def messageClear():
-    system( "cls" )
