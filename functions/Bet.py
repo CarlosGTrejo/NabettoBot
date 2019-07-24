@@ -26,7 +26,7 @@ def majorityBet(bets, current_amount):
     """This function takes data from a Bet class list and the current balance.
     It returns a bet statement based on the team with the most money and the
     current amount of money the owner has."""
-    
+
     blue, red = 0, 0 # assume bet cannot be a negative number
     final_bet_amount: "Current amount * 0.1" = current_amount * 0.1 # each bet is 10% of the total amount owned
 
@@ -41,7 +41,7 @@ def majorityBet(bets, current_amount):
     if (blue > red):
         return "!blue " + str(int(final_bet_amount)) # convert the bet amount to an int because the betting bot only accepts whole numbers
     else:
-        return "!red " + str(int(final_bet_amount)) 
+        return "!red " + str(int(final_bet_amount))
 
 def sideWithMoreMoney(bets):
 
@@ -50,7 +50,7 @@ def sideWithMoreMoney(bets):
     # Sort and add bets to two baskets: red and blue
     for bet in bets:
         if (bet.team == "BLUE"):
-            blue += bet.bet_amount  
+            blue += bet.bet_amount
         else:
             red += bet.bet_amount
 

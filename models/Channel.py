@@ -1,5 +1,3 @@
-from models.Connection import sendMessage
-
 def joinChannel(connection):
     buffer = ""
     Loading = True
@@ -13,10 +11,7 @@ def joinChannel(connection):
             print(line)
             
             if ("End of /NAMES list" in line):
-                Loading = False
-    
+                break
+
     else: # ⬇️ When done loading ⬇️
         print("[+] Successfully joined channel.\n".ljust(60,'='))
-        
-        # sendMessage(gate, "Successfully joined channel.")
-        

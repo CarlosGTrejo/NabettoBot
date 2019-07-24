@@ -1,19 +1,16 @@
-from random import choice
-from time import sleep, time
 from datetime import timedelta
-from traceback import format_exc
-
 from sys import platform
-
-if platform == "win32": from winsound import Beep
+from time import sleep, time
+from traceback import format_exc
 
 from colorama import deinit, init
 
-from functions.Bet import Bet, betExtract, majorityBet, sideWithMoreMoney
-from functions.Client import messageClear, messageFormat
+# from functions.Bet import Bet, betExtract, majorityBet, sideWithMoreMoney
+from functions.Client import messageFormat
 from models.Channel import joinChannel
-from models.Connection import (fetchMessages, keepAlive, openConnection,
-                               sendMessage)
+from models.Connection import (fetchMessages, keepAlive, openConnection)
+
+if platform == "win32": from winsound import Beep
 
 sequence = (293,113), (293,113), (586,226), (440,226)
 init(autoreset=True)#, convert=True)
@@ -22,9 +19,8 @@ def main():
 
     # Variables for betting
     bet_start = False
-    bet_done = False
-    bet_data = () # a Bet class list stores bet data collected and fetches itself to majorityBet
-    timer_start = 0 # marked
+    # bet_done = False
+    # bet_data = () # a Bet class list stores bet data collected and fetches itself to majorityBet
     PONG = "PONG :tmi.twitch.tv\r\n".encode()
 
     # Opening a new connection
@@ -35,8 +31,8 @@ def main():
     # Turn on the bot, begin fetching messages for analysis
     while True:
         messages = fetchMessages(connection)
-        
-        # Read each message     
+
+        # Read each message
         for message in messages:
             if (":tmi.twitch.tv" in message):
                 print(f"\x1b[30m\x1b[103m\n[=] {message}\n")
@@ -75,7 +71,7 @@ def main():
 
         # Temporary: Renew connection every hour and only do so when a betting session has not started yet
         # time_difference: "Deta of beginning_time and time()" = round(abs(connection_time - previous_connection_time), 3)
-        # connection_time = time() - one_point_time 
+        # connection_time = time() - one_point_time
         # if(bet_done == True): # Reset main after each bet session
         #     messageClear()
 
