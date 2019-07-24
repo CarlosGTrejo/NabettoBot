@@ -16,7 +16,7 @@ def openConnection() -> "Socket Obj":
     CHANNEL     = ("JOIN #"+ settings.CHANNEL + "\r\n").encode()
     sock.send(CREDENTIALS)
     sock.send(CHANNEL)
-    
+
     return sock
 
 def keepAlive(connection) -> "Thread Obj":
