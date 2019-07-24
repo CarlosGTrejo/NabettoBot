@@ -14,9 +14,8 @@ def joinChannel(connection):
             
             if ("End of /NAMES list" in line):
                 Loading = False
-    
+
     else: # ⬇️ When done loading ⬇️
         print("[+] Successfully joined channel.\n".ljust(60,'='))
         
         # sendMessage(gate, "Successfully joined channel.")
-        

@@ -35,8 +35,8 @@ def main():
     # Turn on the bot, begin fetching messages for analysis
     while True:
         messages = fetchMessages(connection)
-        
-        # Read each message     
+
+        # Read each message
         for message in messages:
             if (":tmi.twitch.tv" in message):
                 print(f"\x1b[30m\x1b[103m\n[=] {message}\n")
@@ -75,7 +75,7 @@ def main():
 
         # Temporary: Renew connection every hour and only do so when a betting session has not started yet
         # time_difference: "Deta of beginning_time and time()" = round(abs(connection_time - previous_connection_time), 3)
-        # connection_time = time() - one_point_time 
+        # connection_time = time() - one_point_time
         # if(bet_done == True): # Reset main after each bet session
         #     messageClear()
 

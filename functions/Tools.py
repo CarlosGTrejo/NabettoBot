@@ -27,7 +27,7 @@ def logData(function):
     logging.basicConfig(level=logging.DEBUG,filename="bets.csv")
     logger = logging.getLogger(__name__)
     logging.root.handlers[0].setFormatter(CsvFormatter())
-    
+
     @wraps(function)
     def wrapper(message,start):
         output = function(message)
