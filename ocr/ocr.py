@@ -7,8 +7,9 @@ import pytesseract
 from time import sleep
 import cv2 as cv
 
-def statusBoard():
-    """This function uses OCR to translate text from the status board to a string.
+
+class statusBoard():
+    """This class uses OCR to translate text from the status board to a string.
        The status board contains Bet session status, current server, total amount
        of bets and time left for the bet session."""
     x1, y1, x2, y2 = 1522, 0, 1920, 40
