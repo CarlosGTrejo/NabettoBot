@@ -24,7 +24,7 @@ def logBet(bet_tuple):
     """
     Extracts team, shroom amount, and timestamp data from a bet message into bets.csv
     """
-    logging.basicConfig(level=logging.INFO,filename="bets.csv")
+    logging.basicConfig(level=logging.INFO,filename="/Data/bets.csv")
     logging.root.handlers[0].setFormatter(CsvFormatter())
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)

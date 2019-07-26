@@ -1,11 +1,11 @@
 # This file contains functions that use Optical Character Recognition (OCR) to detect text on a screen.
-# These functions are designed to work well on a 1920 x 1080 screen 
+# These functions are designed to work well on a 1920 x 1080 screen
 
-from PIL import Image, ImageGrab
-import numpy as np
-import pytesseract
-from time import sleep
-import cv2 as cv
+# from PIL import Image, ImageGrab
+# import numpy as np
+# import pytesseract
+# from time import sleep
+# import cv2 as cv
 
 
 # class statusBoard():
@@ -29,4 +29,4 @@ import cv2 as cv
 #     else:
 #         return "Blue"
 
-print(statusBoard())
+# print(statusBoard())

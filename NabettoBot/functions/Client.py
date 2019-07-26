@@ -1,6 +1,6 @@
 from random import choice
 
-from models.Connection import settings
+from nabettobot.models.Connection import settings
 
 
 def messageFormat(message) -> 'random_color + "username: message"': # Currently disabled due to unidentified error

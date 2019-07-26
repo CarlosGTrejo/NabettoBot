@@ -1,8 +1,8 @@
 import socket
 from threading import Timer
 
-from functions.Tools import debug
-from models.Fetch import fetchSettings
+from nabettobot.functions.Tools import debug
+from nabettobot.models.Fetch import fetchSettings
 
 settings = fetchSettings()
 buffer = ""

@@ -1,5 +1,5 @@
-from functions.Tools import logBet
-from models.Connection import settings
+from nabettobot.functions.Tools import logBet
+from nabettobot.models.Connection import settings
 
 
 class Bet:
