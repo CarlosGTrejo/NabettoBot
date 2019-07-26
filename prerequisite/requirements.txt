@@ -1,0 +1,11 @@
+beautifulsoup4
+colorama
+numpy
+opencv-python
+pandas
+Pillow
+pytesseract
+selenium
+tesseract
+urllib3
+
