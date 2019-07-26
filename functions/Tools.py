@@ -2,7 +2,6 @@ import csv
 import logging
 from functools import wraps
 from io import StringIO
-from time import time
 
 
 class CsvFormatter(logging.Formatter):
