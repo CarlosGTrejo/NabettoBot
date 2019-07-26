@@ -1,5 +1,4 @@
 beautifulsoup4
-colorama
 numpy
 opencv-python
 pandas
@@ -8,4 +7,4 @@ pytesseract
 selenium
 tesseract
 urllib3
-
+colorama>=0.4.1
