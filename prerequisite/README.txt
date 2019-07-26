@@ -1,2 +1,0 @@
-- Please run install_req.bat as an adminstrator (install_req.bat is Windows)
-- Make sure to install tesseract-ocr from the official website: https://github.com/tesseract-ocr/tesseract/wiki/Downloads
