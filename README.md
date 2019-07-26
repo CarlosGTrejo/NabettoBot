@@ -14,3 +14,11 @@ A Twitch bot that bets for you. (Written in Python)
 cd NabettoBot
 pip install -r requirements.txt
 ```
+
+****
+
+## Running The Bot
+
+```cmd
+python -m nabettobot
+```
