@@ -20,21 +20,17 @@ class CsvFormatter(logging.Formatter):
         self.output.seek(0)
         return data.strip()
 
-def logData(function):
+
+def logBet(bet_tuple):
     """
     Extracts team, shroom amount, and timestamp data from a bet message into bets.csv
     """
-    logging.basicConfig(level=logging.DEBUG,filename="bets.csv")
-    logger = logging.getLogger(__name__)
+    logging.basicConfig(level=logging.INFO,filename="bets.csv")
     logging.root.handlers[0].setFormatter(CsvFormatter())
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
 
-    @wraps(function)
-    def wrapper(message,start):
-        output = function(message)
-        logger.info(output)
-        print((time()-start),output,sep='\t')
-        return output
-    return wrapper
+    logger.info(bet_tuple)
 
 def debug(function):
     """
