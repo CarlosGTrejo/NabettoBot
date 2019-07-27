@@ -1,6 +1,6 @@
 from datetime import timedelta
 from sys import platform
-from time import perf_counter, sleep, time
+from time import perf_counter, sleep # ,time
 from traceback import format_exc
 
 from colorama import deinit, init
