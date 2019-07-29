@@ -1,5 +1,5 @@
 import unittest
-from nabettobot.models import Bet
+from NabettoBot.models.Bet import Bet
 
 class TestBet(unittest.TestCase):
     def BetTestCase(self):

@@ -1,0 +1,1 @@
+# Convert StreamCapture into a package
