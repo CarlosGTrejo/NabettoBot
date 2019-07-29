@@ -1,12 +1,12 @@
 # This file contains classes and functions that use Optical Character Recognition (OCR) to detect text on a screen.
 # These functions are designed to work well on a 1920 x 1080 screen
-# Because this project is educationally oriented, this file might contain peculiarly designed classes and functions
+# Because this project is for educational purposes, this file might contain peculiarly designed classes and functions
 
 from PIL import Image, ImageGrab
 import pytesseract
 import numpy as np
 
-from time import sleep
+from time import sleep # For testing purpose
 
 
 class StreamPos:
@@ -20,11 +20,14 @@ class StreamPos:
     def __str__(self):
         return "Current capturable stream positions: status banner, winner banner" # Temporary way to display all vars from __init__
 
-class StreamInfo(StreamPos): # inherit attributes from StreamPos
-    """Uses OCR to translate text from the stream to readable strings. Only works with 1080p template."""
-    def __init__(self, pytesseract_local = r'C:\\Program Files\\Tesseract-OCR\\tesseract'):
+class StreamCapture(StreamPos): # inherit attributes from StreamPos
+    """Uses OCR to translate text from the stream to readable strings. First parameter accepts the location of tesseract. Only works with 1080p template."""
+    def __init__(self, tesseract_local = r'C:\\Program Files\\Tesseract-OCR\\tesseract'):
         StreamPos.__init__(self)
-        self.pytesseract_local = pytesseract_local # Tesseract location
+        self.pytesseract_local = tesseract_local # Tesseract location
+    
+    def __str__(self):
+        return "This object is an instance of StreamCapture class."
     
     def capture_status_banner(self):
         """Captures the status banner on the top left corner of the stream (at full 1080p)"""
@@ -34,7 +37,7 @@ class StreamInfo(StreamPos): # inherit attributes from StreamPos
         return text
 
     def capture_winner_banner(self):
-        """Captures the winner banner at the stream's center (at full 1080p). Only after the game."""
+        """Captures the winner banner at the stream's center (at full 1080p). Only works after the game."""
         img = ImageGrab.grab(bbox = self.winner_banner)
         pytesseract.pytesseract.tesseract_cmd = self.pytesseract_local
         text = pytesseract.image_to_string(img, lang = 'eng')
@@ -47,9 +50,12 @@ class StreamInfo(StreamPos): # inherit attributes from StreamPos
 
     # ---> ADD MORE FUNCTIONS TO CAPTURE ABOVE HERE <---
 
-# TESTING PURPOSE ONLY. COMMENT OR DELETE WHEN INTO PRODUCTION
+# TESTING PURPOSE ONLY. COMMENT WHEN IN PRODUCTION
 if __name__ == "__main__":
-    stream_info = StreamInfo()
+    stream_info = StreamCapture()
+    print(stream_info)
     sleep(5)
     winner_banner = stream_info.capture_winner_banner()
     print(winner_banner)
+else:
+    print("Capture.py has been imported!")
