@@ -2,13 +2,21 @@ import csv
 import logging
 from functools import wraps
 from io import StringIO
+from os.path import dirname, abspath
+from os import mkdir
 
+path = dirname(abspath(__file__)) + '\\'
 
 class CsvFormatter(logging.Formatter):
     def __init__(self):
         super().__init__()
         self.output = StringIO()
         self.writer = csv.writer(self.output)
+        try:
+            mkdir(path+'Data')
+            print('\x1b[96m(i) Created Data Folder')
+        except FileExistsError:
+            pass
 
     def format(self, record):
         self.datefmt = '%Y-%m-%d %H:%M:%S'
@@ -24,7 +32,7 @@ def logBet(bet_tuple):
     """
     Extracts team, shroom amount, and timestamp data from a bet message into bets.csv
     """
-    logging.basicConfig(level=logging.INFO,filename="/Data/bets.csv")
+    logging.basicConfig(level=logging.INFO,filename=f"{path}Data\\bets.csv")
     logging.root.handlers[0].setFormatter(CsvFormatter())
     logger = logging.getLogger(__name__)
     logger.setLevel(logging.INFO)
