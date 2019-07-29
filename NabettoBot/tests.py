@@ -1,5 +1,5 @@
 import unittest, socket
-from models import Bet
+from .models import Bet
 
 
 class TestBet(unittest.TestCase):
