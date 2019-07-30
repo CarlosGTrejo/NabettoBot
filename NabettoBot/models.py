@@ -79,7 +79,7 @@ class Client:
         self.sock = socket.socket()
         self.buffer = ""
         self.messages = []
-    
+
     def start(self): # Open Connection and start loading
         """Starts the client by opening the connection to irc.twitch.tv:6667
         and retrieves the /NAMES list"""
@@ -103,7 +103,7 @@ class Client:
                 if ("End of /NAMES list" in line):
                     print('-'*70,"\n[+] Successfully joined channel.\n")
                     Loading = False
-    
+
     def fetchMessages(self) -> "Client.messages":
         """Messages are retrieved from the server and placed into a "messages" instance variable"""
         self.buffer += self.sock.recv(1024).decode()
@@ -116,7 +116,7 @@ class Client:
         envelope = ("PRIVMSG #" + Settings.CHANNEL + " :" + msg + "\r\n").encode()
         self.sock.send(envelope)
         print("Sent: " + msg)
-    
+
     def farm(self):
         """Dedicates a thread to automatically gather shrooms every 2 hours."""
         self.sock.send("!farm".encode())
@@ -129,7 +129,7 @@ class Client:
             print("\x1b[30m\x1b[103m"+"\n  [O] Ping Received\t\n".center(28,'\t'))
             self.sock.send(self.PONG)
             print("\x1b[30m\x1b[106m"+"\n  [@] PONG Sent\t\t\n".center(25,'\t'))
-    
+
     @staticmethod
     def display(msg):
         """displays colorful messages"""
@@ -153,35 +153,77 @@ class RiotAPI:
         summoner_by_name= 'summoner/v4/summoners/by-name',
         league_by_summonerID= 'league/v4/entries/by-summoner'
     )
+    API_regions = dict(
+        na  = 'na1',
+        euw = 'euw1',
+        eune= 'eun1',
+        oce = 'oc1',
+        lan = 'la1',
+        las = 'la2',
+        kr  = 'kr',
+        jp  = 'jp1',
+        br  = 'br1',
+        tr  = 'tr1',
+        ru  = 'ru'
+    )
     @classmethod
     def __init__(cls, api_key):
         cls.api_key = api_key
-    
+
     @classmethod
-    def _request(cls, params={}) -> "dict: Response":
-        data = {'API KEY': cls.api_key}
-        data.update(params)
-        response = requests.get(f"https://{data['region']}.api.riotgames.com/lol/{data['method']}/{data['args']}?api_key={cls.api_key}")
+    def request(cls, **kwargs) -> dict:
+        params = {'API KEY': cls.api_key}
+        params.update(kwargs)
+
+        region = params.get('region', 'na') # Update region value to actual API region value
+        params['region'] = cls.API_regions[region]
+
+        response = requests.get(f"https://{params['region']}.api.riotgames.com/lol/{params['method']}/{params['args']}?api_key={params['API KEY']}")
         return response.json()
-    
+
     @staticmethod
-    def GETGameInfo() -> ("region", "SN"):
-        """Gets the game info for the current saltyteemo game using gameinfo.saltyteemo.com"""
+    def GETGameInfo() -> tuple:
+        """Returns a player's name and the region for the current saltyteemo game stream
+
+        Example:
+        RiotAPI.GETGameInfo() -> ('na', 'Kato2')
+        """
         r = requests.get("https://gameinfo.saltyteemo.com")
         URL = r.url
         info = URL.split('/live/')[1].split('?')[0]
         region, SN = info.split('/')
         return (region, SN)
-    
+
     @classmethod
-    def GETSummonerIDbyName(cls, region, SN) -> "str:Summoner ID (SID)":
-        response = cls._request(params={'method':cls.API_methods['summoner_by_name'], 'region':region, 'args':SN})
+    def GETSummonerIDbyName(cls, region, SN:"Summoner Name") -> str:
+        """Returns the Summoner ID for a given Summoner name (player name).
+
+        Args:
+        region -- The player's region.
+        SN     -- The player's name.
+
+        Example:
+        RiotAPI.GETSummonerIDbyName('na', Kato2) -> 'XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+        """
+        response = cls.request(method=cls.API_methods['summoner_by_name'], region=region, args=SN)
         return response['id']
-    
+
     @classmethod
-    def GETWinLossPercent(cls, region, SID) -> float:
-        response = cls._request(params={'method':cls.API_methods['league_by_summonerID'], 'region':region, 'args':SID}).pop()
+    def GETWinLossPercent(cls, region, SID:"Summoner ID") -> float:
+        """Returns the Win/Loss percentage for the given summoner ID (SID).
+        The SID can be retrived using RiotAPI.GETSummonerIDbyName("Player")
+
+        Args:
+        region -- The player's region.
+        SID    -- The Summoners Encrypted ID (SID)
+
+        Example:
+        RiotAPI.GETWinLossPercent('na', 'SIDSIDSIDSID') -> 59.34
+        """
+        response = cls.request(method=cls.API_methods['league_by_summonerID'],\
+                                region=region,\
+                                args=SID).pop()
         wins, losses = response['wins'], response['losses']
         WL: "Win Loss percentage" = (wins/(wins+losses))*100
-        return WL
+        return round(WL, 2)
 
