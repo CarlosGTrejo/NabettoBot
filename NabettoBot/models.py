@@ -1,5 +1,5 @@
 from .functions.Tools import logBet
-import socket, configparser
+import socket, configparser, requests
 from os.path import abspath, dirname
 from os import getenv
 from threading import Timer
@@ -141,3 +141,47 @@ class Client:
         text = msg.split(split_point)[1]
         print(timedelta(seconds=int(perf_counter())),\
             f"\x1b[{choice(colors)}{username}: {text}")
+
+
+
+class RiotAPI:
+    """
+    SN: Summoner Name
+    SID: Summoner ID
+    """
+    API_methods = dict(
+        summoner_by_name= 'summoner/v4/summoners/by-name',
+        league_by_summonerID= 'league/v4/entries/by-summoner'
+    )
+    @classmethod
+    def __init__(cls, api_key):
+        cls.api_key = api_key
+    
+    @classmethod
+    def _request(cls, params={}) -> "dict: Response":
+        data = {'API KEY': cls.api_key}
+        data.update(params)
+        response = requests.get(f"https://{data['region']}.api.riotgames.com/lol/{data['method']}/{data['args']}?api_key={cls.api_key}")
+        return response.json()
+    
+    @staticmethod
+    def GETGameInfo() -> ("region", "SN"):
+        """Gets the game info for the current saltyteemo game using gameinfo.saltyteemo.com"""
+        r = requests.get("https://gameinfo.saltyteemo.com")
+        URL = r.url
+        info = URL.split('/live/')[1].split('?')[0]
+        region, SN = info.split('/')
+        return (region, SN)
+    
+    @classmethod
+    def GETSummonerIDbyName(cls, region, SN) -> "str:Summoner ID (SID)":
+        response = cls._request(params={'method':cls.API_methods['summoner_by_name'], 'region':region, 'args':SN})
+        return response['id']
+    
+    @classmethod
+    def GETWinLossPercent(cls, region, SID) -> float:
+        response = cls._request(params={'method':cls.API_methods['league_by_summonerID'], 'region':region, 'args':SID}).pop()
+        wins, losses = response['wins'], response['losses']
+        WL: "Win Loss percentage" = (wins/(wins+losses))*100
+        return WL
+
