@@ -199,7 +199,7 @@ class RiotAPI:
         """Returns the Summoner ID for a given Summoner name (player name).
 
         Args:
-        region -- The player's region.
+        region -- The player's region ID.
         SN     -- The player's name.
 
         Example:
@@ -214,7 +214,7 @@ class RiotAPI:
         The SID can be retrived using RiotAPI.GETSummonerIDbyName("Player")
 
         Args:
-        region -- The player's region.
+        region -- The player's region ID.
         SID    -- The Summoners Encrypted ID (SID)
 
         Example:
@@ -227,3 +227,20 @@ class RiotAPI:
         WL: "Win Loss percentage" = (wins/(wins+losses))*100
         return round(WL, 2)
 
+    @classmethod
+    def GETRank(cls, region, SID:"Summoner ID") -> "{TIER} {RANK}":
+        """Returns the "Rank" (Tier Rank) for the given Summoner ID
+
+        Args:
+        region -- The player's region ID.
+        SID    -- The player's encrypted Summoner ID.
+
+        Example:
+        RiotAPI.GetRank('na', 'SIDSIDSIDSID') -> 'IRON II'
+        """
+
+        response = cls.request(method=cls.API_methods['league_by_summonerID'],\
+                                region=region,\
+                                args=SID).pop()
+        tier, rank = response['tier'], response['rank']
+        return f"{tier} {rank}"
