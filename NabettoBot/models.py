@@ -121,6 +121,7 @@ class Client:
         """Dedicates a thread to automatically gather shrooms every 2 hours."""
         self.sock.send("!farm".encode())
         farm_thread = Timer(3600, self.farm, [self])
+        farm_thread.daemon = True; farm_thread.start()
         print('\x1b[97m\x1b[104m'+"\n  (i) Farmed mushrooms\t\n".center(31,'\t'))
 
     def CheckPINGPONG(self,msg):
