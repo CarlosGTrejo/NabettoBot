@@ -244,3 +244,4 @@ class RiotAPI:
                                 args=SID).pop()
         tier, rank = response['tier'], response['rank']
         return f"{tier} {rank}"
+
