@@ -30,7 +30,7 @@ class Settings:
 
 
 class Bet:
-    """The class stores all basic information collected from each betting session."""
+    """Stores all basic information collected from each betting session and facilitates working with Bet messages"""
 
     Settings()
 
@@ -45,11 +45,17 @@ class Bet:
 
     @staticmethod
     def resetData() -> None:
-        """Resets the data variable to {blue:0, red:0} for the next betting session"""
+        """Resets the data variable to {blue:0, red:0} for the next betting session
+
+        Args: None
+        
+        Example:
+        Bet.resetData()"""
+
         Bet.__static_data__.update(blue=0, red=0) # Resetting the data variable.
 
     @classmethod
-    def extractBet(cls,message: "A betting request message") -> "Bet Object":
+    def extractBet(cls,message: "A betting message") -> "Bet Object":
         """Extracts bet data from a message and updates the __static_data__ variable based on the chosen team"""
         split_point: "Where the message is split" = "PRIVMSG #" + Settings.CHANNEL + " :"
         # Extract username
@@ -74,7 +80,6 @@ class Bet:
 class Client:
     """Client is used to send and retrieve messages"""
     Settings()
-    PONG = "PONG :tmi.twitch.tv\r\n".encode()
     def __init__(self):
         self.sock = socket.socket()
         self.buffer = ""
@@ -119,7 +124,8 @@ class Client:
 
     def farm(self):
         """Dedicates a thread to automatically gather shrooms every 2 hours."""
-        self.sock.send("!farm".encode())
+        FARM = ("PRIVMSG #"+Settings.CHANNEL+" :!farm\r\n").encode()
+        self.sock.send(FARM)
         farm_thread = Timer(3600, self.farm, [self])
         farm_thread.daemon = True; farm_thread.start()
         print('\x1b[97m\x1b[104m'+"\n  (i) Farmed mushrooms\t\n".center(31,'\t'))
@@ -128,12 +134,12 @@ class Client:
         """Replies to PING messages with proper PONG"""
         if (":tmi.twitch.tv" in msg) and ("PING" in msg):
             print("\x1b[30m\x1b[103m"+"\n  [O] Ping Received\t\n".center(28,'\t'))
-            self.sock.send(self.PONG)
+            self.sock.send("PONG :tmi.twitch.tv\r\n".encode())
             print("\x1b[30m\x1b[106m"+"\n  [@] PONG Sent\t\t\n".center(25,'\t'))
-
+    
     @staticmethod
     def display(msg):
-        """displays colorful messages"""
+        """Prints colorful messages"""
         if (":tmi.twitch.tv" in msg) and ("PING" in msg):
             return None
         colors = ('36m', '32m', '90m', '94m', '96m', '92m', '95m', '91m', '97m', '93m', '35m')
