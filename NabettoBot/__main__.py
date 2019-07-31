@@ -25,6 +25,7 @@ def main():
             # Read each message
             for message in client.messages:
                 client.CheckPINGPONG(message)
+
                 if ("Bet complete" in message):
                     if (bet_start == False): # Creates timestamp for the beginning of the betting session.
                         print(" BETTING SESSION STARTED ".center(70, '='))
@@ -32,7 +33,7 @@ def main():
                         # timer_start = time()
 
                     Bet.extractBet(message)
-                
+
                 elif ("Betting has ended" in message):
                     print(" BETTING SESSION ENDED ".center(70,'='))
                     Bet.resetData()
