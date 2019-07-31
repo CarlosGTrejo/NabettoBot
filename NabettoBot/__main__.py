@@ -13,28 +13,28 @@ def main():
         # Variables for betting
         bet_start = False
 
-        # Opening a new connection
+        # Initialize the bot (client)
         client = Client()
         client.start()
         client.farm()
 
-        # Turn on the bot, begin fetching messages for analysis
+        # Begin fetching messages for analysis
         while True:
             client.fetchMessages()
 
-            # Read each message
+        # Check messages for bets or pings
             for message in client.messages:
                 client.CheckPINGPONG(message)
 
                 if ("Bet complete" in message):
-                    if (bet_start == False): # Creates timestamp for the beginning of the betting session.
-                        print(" BETTING SESSION STARTED ".center(70, '='))
+                    if (bet_start == False):
                         bet_start = True
-                        # timer_start = time()
+                        print(" BETTING SESSION STARTED ".center(70, '='))
 
                     Bet.extractBet(message)
 
                 elif ("Betting has ended" in message):
+                    bet_start == False
                     print(" BETTING SESSION ENDED ".center(70,'='))
                     Bet.resetData()
 
@@ -47,10 +47,6 @@ def main():
                 #     sleep(50)
                 #     bet_done = True
 
-                # elif ("Betting has ended" in message):
-                #     bet_start = False
-                #     bet_done = True
-                #     print("[+] Finished Betting Session.")
 
     except KeyboardInterrupt:
         print("\x1b[96m[.] Exitting...")
@@ -61,7 +57,7 @@ def main():
         else:
             print('\a',end='\r'); sleep(.7); print('\a', end='\r') # Notify the user that an exception has happened using sound notification
 
-        print(f"\x1b[107m\x1b[91m[!] Exception: {e}\nInfo: {format_exc()}")
+        print(f"\x1b[107m\x1b[91m[!] Exception: {e}\nInfo: {format_exc()}") # Display the exception
 
     finally:
         deinit()
