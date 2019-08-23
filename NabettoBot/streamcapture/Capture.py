@@ -5,6 +5,7 @@
 from PIL import Image, ImageGrab
 import pytesseract
 import numpy as np
+from ctypes import windll # Fix not capture full screen issue
 
 from time import sleep # For testing purpose
 
@@ -22,7 +23,7 @@ class StreamPos:
 
 class StreamCapture(StreamPos): # inherit attributes from StreamPos
     """Uses OCR to translate text from the stream to readable strings. First parameter accepts the location of tesseract. Only works with 1080p template."""
-    def __init__(self, tesseract_local = r'C:\\Program Files\\Tesseract-OCR\\tesseract'):
+    def __init__(self, tesseract_local = r'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'):
         StreamPos.__init__(self)
         self.pytesseract_local = tesseract_local # Tesseract location
     
@@ -52,10 +53,12 @@ class StreamCapture(StreamPos): # inherit attributes from StreamPos
 
 # TESTING PURPOSE ONLY. COMMENT WHEN IN PRODUCTION
 if __name__ == "__main__":
+    user32 = windll.user32
+    user32.SetProcessDPIAware()
     stream_info = StreamCapture()
-    print(stream_info)
-    sleep(5)
+    status_banner = stream_info.capture_status_banner()
     winner_banner = stream_info.capture_winner_banner()
+    print(status_banner)
     print(winner_banner)
 else:
     print("Capture.py has been imported!")
