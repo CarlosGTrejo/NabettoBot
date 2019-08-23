@@ -24,7 +24,7 @@ class StreamPos:
 class StreamCapture(StreamPos): # inherit attributes from StreamPos
     """Uses OCR to translate text from the stream to readable strings. First parameter accepts the location of tesseract. Only works with 1080p template."""
     def __init__(self, tesseract_local = r'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'):
-        StreamPos.__init__(self)
+        StreamPos.__init__(self) # initialize StreamPos with default parameter
         self.pytesseract_local = tesseract_local # Tesseract location
     
     def __str__(self):
