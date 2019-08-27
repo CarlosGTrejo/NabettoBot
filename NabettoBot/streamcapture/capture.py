@@ -1,6 +1,10 @@
-# This file contains classes and functions that use Optical Character Recognition (OCR) to detect text on a screen.
+# -------------------------> CURRENTLY NOT BEING USED <-------------------------
+
+
+# This file contains classes and functions that use Optical Character Recognition (OCR) to detect text on a screen
 # These functions are designed to work well on a 1920 x 1080 screen
 # Because this project is for educational purposes, this file might contain peculiarly designed classes and functions
+
 
 from PIL import Image, ImageGrab
 import pytesseract
@@ -21,10 +25,10 @@ class StreamPos:
     def __str__(self):
         return "Current capturable stream positions: status banner, winner banner" # Temporary way to display all vars from __init__
 
-class StreamCapture(StreamPos): # inherit attributes from StreamPos
+class StreamCapture(StreamPos): # Inherit attributes from StreamPos
     """Uses OCR to translate text from the stream to readable strings. First parameter accepts the location of tesseract. Only works with 1080p template."""
     def __init__(self, tesseract_local = r'C:\\Program Files (x86)\\Tesseract-OCR\\tesseract'):
-        StreamPos.__init__(self) # initialize StreamPos with default parameter
+        StreamPos.__init__(self) # Initialize StreamPos with default parameter
         self.pytesseract_local = tesseract_local # Tesseract location
     
     def __str__(self):
