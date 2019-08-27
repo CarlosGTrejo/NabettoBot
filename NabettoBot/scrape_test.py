@@ -1,22 +1,23 @@
-import cfscrape
 from selenium import webdriver
 from getpass import getpass
 from time import sleep
+import sys, os
 
 def main():
-    USERNAME = input()
+
+    USERNAME = input("Username: ")
     PASSWORD = getpass()
+    
 
     # Generate a new link from my.saltyteemo.com to twitch for authentication
-    scraper = cfscrape.CloudflareScraper()
-    twitch_url = scraper.get("https://my.saltyteemo.com/").url
 
     # Open chrome in incognito -> access the link
     options = webdriver.ChromeOptions()
     # options.add_argument("--incognito")
 
-    driver = webdriver.Chrome(executable_path=r"C:\Users\Minh Luu\Downloads\chromedriver_win32\chromedriver.exe", options=options)
-    driver.get(twitch_url)
+    driver = webdriver.Chrome(executable_path=r"C:\Users\Minh-server\Downloads\chromedriver_win32\chromedriver.exe", options=options)
+    driver.get("https://my.saltyteemo.com/")
+    sleep(10)
 
 
     # Authenticate
@@ -39,3 +40,7 @@ def main():
     print(balance[1])
 
     driver.quit()
+
+while True:
+    main()
+    sleep(3000)
