@@ -8,7 +8,7 @@ A Twitch bot that bets for you. (Written in Python)
 
 1. ~~Make sure to install tesseract-ocr from the official [website](https://github.com/tesseract-ocr/tesseract/wiki/Downloads).~~ Currently not in use.
 
-2. Install chromedriver and copy down the directory for later installation [website] (https://chromedriver.chromium.org/downloads).
+2. Install chromedriver and copy down the directory for later installation [website](https://chromedriver.chromium.org/downloads).
 
 3. Go to the project directory and install requirements.txt
 
