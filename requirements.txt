@@ -8,4 +8,3 @@ selenium
 tesseract
 urllib3
 colorama>=0.4.1
-cfscrape

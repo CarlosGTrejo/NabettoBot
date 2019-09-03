@@ -7,18 +7,12 @@ def main():
 
     USERNAME = input("Username: ")
     PASSWORD = getpass()
-    
-
-    # Generate a new link from my.saltyteemo.com to twitch for authentication
 
     # Open chrome in incognito -> access the link
-    options = webdriver.ChromeOptions()
-    # options.add_argument("--incognito")
-
-    driver = webdriver.Chrome(executable_path=r"C:\Users\Minh-server\Downloads\chromedriver_win32\chromedriver.exe", options=options)
+    # options = webdriver.ChromeOptions()
+    driver = webdriver.Chrome(executable_path=r"C:\Users\Minh Luu\Downloads\chromedriver_win32\chromedriver.exe")
     driver.get("https://my.saltyteemo.com/")
     sleep(10)
-
 
     # Authenticate
     username = driver.find_element_by_id("username")
@@ -31,16 +25,15 @@ def main():
 
     driver.find_element_by_class_name("buttons").click()
 
-    sleep(10)
+    sleep(10) # Wait to pass another CloudFlare page
 
     # Get the balance
-    balance = driver.find_element_by_id("f1").text
-    balance = balance.split("\n")
+    while (True):
+        driver.refresh()
+        balance = driver.find_element_by_id("f1").text
+        balance = balance.split("\n")
+        print(balance[1])
+        sleep(30)
 
-    print(balance[1])
-
-    driver.quit()
-
-while True:
+if __name__ == "__main__":
     main()
-    sleep(3000)

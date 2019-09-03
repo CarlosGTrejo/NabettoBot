@@ -18,11 +18,11 @@ def main():
         client.start()
         client.farm()
 
-        # Begin fetching messages for analysis
+        # Begin fetching messages
         while True:
             client.fetchMessages()
 
-        # Check messages for bets or pings
+            # Check messages for bets or pings
             for message in client.messages:
                 client.CheckPINGPONG(message)
 
