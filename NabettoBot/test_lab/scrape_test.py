@@ -9,8 +9,11 @@ def main():
     PASSWORD = getpass()
 
     # Open chrome in incognito -> access the link
-    # options = webdriver.ChromeOptions()
-    driver = webdriver.Chrome(executable_path=r"C:\Users\Minh Luu\Downloads\chromedriver_win32\chromedriver.exe")
+    options = webdriver.ChromeOptions()
+    # options.add_argument("--headless")
+    options.add_argument("--disable-gpu")
+    options.add_argument("--disable-extensions")
+    driver = webdriver.Chrome(options=options, executable_path=r"C:\Users\Minh Luu\Downloads\chromedriver_win32\chromedriver.exe")
     driver.get("https://my.saltyteemo.com/")
     sleep(10)
 
