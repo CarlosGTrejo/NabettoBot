@@ -5,7 +5,6 @@ from models.Connection import openConnection, fetchMessages, sendMessage, keepAl
 from models.Channel import joinChannel
 from functions.Bet import Bet, betExtract, majorityBet, minorityBet, sideWithMoreMoney
 from functions.Client import messageFormat, messageClear
-from ocr.ocr import currentServer
 
 current_balance = 0
 

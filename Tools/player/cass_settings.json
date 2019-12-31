@@ -1,0 +1,43 @@
+{
+    "global": {
+        "default_region": null
+    },
+    "RiotAPI": {
+        "api_key": "RGAPI-970e1256-dfb6-4ea7-bb9d-8c1bf478b1a0",
+        "limiting_share": 1.0,
+        "request_error_handling": {
+            "404": {
+                "strategy": "throw"
+            },
+            "429": {
+                "service": {
+                    "strategy": "exponential_backoff",
+                    "initial_backoff": 1.0,
+                    "backoff_factor": 2.0,
+                    "max_attempts": 4
+                },
+                "method": {
+                    "strategy": "retry_from_headers",
+                    "max_attempts": 5
+                },
+                "application": {
+                    "strategy": "retry_from_headers",
+                    "max_attempts": 5
+                }
+          },
+          "500": {
+              "strategy": "throw"
+          },
+          "503": {
+              "strategy": "throw"
+          },
+          "timeout": {
+              "strategy": "throw"
+          }
+        }
+    },
+    "logging": {
+        "print_calls": true,
+        "print_riot_api_key": false
+    }
+}

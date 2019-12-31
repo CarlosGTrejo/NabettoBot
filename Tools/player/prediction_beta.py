@@ -1,6 +1,7 @@
+
 import cassiopeia as cass
 
-cass.set_riot_api_key("")
+cass.set_riot_api_key("RGAPI-c8e115b0-c98b-4ec6-9b9d-53dcbe11d6bb")
 
 print("WELCOME TO SCUFFED WINRATE CHECKER:")
 try:
@@ -17,6 +18,7 @@ try:
         
         for participant in current_match_participants:
             participant_champion = participant.champion
+            print(participant_champion)
             matches = participant.summoner.match_history(seasons={season}, queues={queue}, champions={participant_champion})
             win_counter, lose_counter = 0, 0
             wr = 0
