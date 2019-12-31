@@ -90,15 +90,16 @@ class Player:
             print("This has not played any ranked SoloQ game with {}. The default value is set to {}%".format(self._champion, self._rank_wr))
         except:
             print("Unexpected error. The default value is set to {}%".format(self._champ_wr))
+        return self._rank_wr
 
     def champ_mastery(self):
         """Returns player's mastery on a specific champ. 
         -1 if that player does not exist."""
         try:
             self._champ_mastery = get_champion_mastery(champion=Champion(name=self._champion , region=self._region), summoner=Summoner(name=self._name, region=self._region), region=self._region).points
-            
         except:
-            return -1
+            print("Unexpected error. The default value is set to {}%".format(self._champ_mastery))
+        return self._champ_mastery
     
 
 
