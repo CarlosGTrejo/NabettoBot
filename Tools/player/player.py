@@ -1,7 +1,7 @@
 # This file collects player data based on specific needs
 
 from cassiopeia import Summoner, Queue, Season, Champion, apply_settings, set_riot_api_key, get_champion_mastery
-from time import sleep
+# from time import sleep
 
 # SETTINGS
 apply_settings(r".\\cass_settings.json")
@@ -35,8 +35,8 @@ class Player:
         self._region = region
         self._level = kwargs['level'] if 'level' in kwargs else 0
         self._rank = kwargs['rank'] if 'rank' in kwargs else 0
-        self._rank_wr = kwargs['rank_wr'] if 'rank_wr' in kwargs else 0
-        self._champ_wr = kwargs['champ_wr'] if 'champ_wr' in kwargs else 0
+        self._rank_wr = kwargs['rank_wr'] if 'rank_wr' in kwargs else -1
+        self._champ_wr = kwargs['champ_wr'] if 'champ_wr' in kwargs else -1
         self._champ_mastery = kwargs['champ_mastery'] if 'champ_mastery' in kwargs else 0
 
     def level(self):
@@ -51,7 +51,7 @@ class Player:
     def rank(self):
         """Returns the SoloQ rank of a player."""
         try:
-            self._rank = RANK_TO_NUMBER[str(self._summoner.ranks[Queue.ranked_solo_fives]).replace(" ", "").replace("<", "").replace(">", "")]
+            self._rank = RANK_TO_NUMBER[str(self._summoner.ranks[queue]).replace(" ", "").replace("<", "").replace(">", "")]
         except:
             print("Unexpected error. The default value is set to {}.".format(self._rank))
         return self._rank
@@ -61,7 +61,7 @@ class Player:
         -1 if that player does not exist.
         -2 if there is no SoloQ info."""
         try:
-            summoner_soloq_entries = self._summoner.league_entries[Queue.ranked_solo_fives]
+            summoner_soloq_entries = self._summoner.league_entries[queue]
             wins = summoner_soloq_entries.wins
             losses = summoner_soloq_entries.losses
             self._rank_wr = round((wins/(wins + losses) * 100), 1)
@@ -96,15 +96,18 @@ class Player:
         try:
             self._champ_mastery = get_champion_mastery(champion=self._champion, summoner=self._summoner, region=self._region).points
         except:
-            print("Unexpected error. The default value is set to {}%".format(self._champ_mastery))
+            print("Unexpected error. The default value is set to {}.".format(self._champ_mastery))
         return self._champ_mastery
     
 
 # FOR TROUBLESHOOTING
-# if __name__ == "__main__":
+if __name__ == "__main__":
 #     players = [Player("pliuwu", "NA", "Nami"), Player("jinlongr", "NA", "Akali"), Player("ifukcinghateminh", "EUW", "Wukong")]
 #     for player in players:
 #         print(player.champ_mastery())
+
+    player = Player("Frogchamp0w0", "NA", "Senna")
+    print(player.champ_mastery(), player.champ_wr())
 
 
 
