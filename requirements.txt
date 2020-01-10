@@ -1,11 +1,2 @@
-beautifulsoup4
-numpy
-opencv-python
-pandas
-Pillow
-pytesseract
-selenium
-tesseract
-urllib3
-colorama>=0.4.1
-cfscrape
+oauth:a1lhwstlol7pggdgczo92u6rcd47xe
+py -m nabetto -u kato_sh -k 123 -d 1 -p
