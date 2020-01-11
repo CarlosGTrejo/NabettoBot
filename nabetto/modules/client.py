@@ -3,16 +3,15 @@ from threading import Timer
 from time import perf_counter
 from random import choice
 from datetime import timedelta
+import nabetto.modules.utils as utils
 
 class Client:
     """Client is used to send and retrieve messages from the SaltyTeemo Twitch chat."""
 
-    def __init__(self, USER, PASS, logger=None, logs2file=False):
+    def __init__(self, USER, PASS):
         TOKEN =   bytes("PASS " + PASS.strip() + "\r\n", 'utf-8')
         NICK =    bytes("NICK " + USER + "\r\n", 'utf-8')
         CHANNEL = bytes("JOIN #saltyteemo\r\n", 'utf-8')
-        self.logger = logger
-        self.logs2file = logs2file #TODO: Use this to determine whether to print colored output or monochrome
         self.sock = socket.socket()
         self.messages = []
         self.buffer = ""
@@ -30,10 +29,10 @@ class Client:
             self.buffer = tmp.pop()
 
             for line in tmp:
-                self.logger.debug(f'(i) {line}')
+                utils.logger.debug(f'(i) {line}')
 
                 if ("End of /NAMES list" in line):
-                    self.logger.info(" [+] Successfully joined channel. ".center(70,'='))
+                    utils.logger.info(" [+] Successfully joined channel. ".center(70,'='))
                     self.buffer = ""
                     Loading = False
 
@@ -53,7 +52,7 @@ class Client:
         """Sends a message to the server"""
         envelope = ("PRIVMSG #saltyteemo :" + msg + "\r\n").encode()
         self.sock.send(envelope)
-        self.logger.info(f'Sent: {msg}')
+        utils.logger.info(f'Sent: {msg}')
 
     def farm(self):
         """Dedicates a thread to automatically gather shrooms every 2 hours."""
@@ -61,22 +60,22 @@ class Client:
         self.sock.send(FARM)
         farm_thread = Timer(3600, self.farm, [self])
         farm_thread.daemon = True; farm_thread.start()
-        self.logger.info("(i) Farmed mushrooms\t\n".center(31,'\t'))
+        utils.logger.info("(i) Farmed mushrooms\t\n".center(31,'\t'))
 
     def CheckPINGPONG(self,msg):
         """Replies to PING messages with proper PONG"""
         if (":tmi.twitch.tv" in msg) and ("PING" in msg):
-            self.logger.debug("\n  [O] Ping Received\t\n".center(28,'\t'))
+            utils.logger.debug("\n  [O] Ping Received\t\n".center(28,'\t'))
             self.sock.send("PONG :tmi.twitch.tv\r\n".encode())
-            self.logger.debug("\n  [@] PONG Sent\t\t\n".center(25,'\t'))
+            utils.logger.debug("\n  [@] PONG Sent\t\t\n".center(25,'\t'))
     
     def display(self,msg) -> None:
         """Prints colorful messages and formats them in human readable format"""
-        self.logger.debug(f'display({msg})')
+        utils.logger.debug(f'display({msg})')
         if (":tmi.twitch.tv" in msg) and ("PING" in msg):
             return None
         colors = ('36m', '32m', '90m', '94m', '96m', '92m', '95m', '91m', '97m', '93m', '35m')
         split_point = " PRIVMSG #saltyteemo :"
         username = msg.split(split_point)[0].split("!")[0].strip(":")
         text = msg.split(split_point)[1]
-        self.logger.info(f"{timedelta(seconds=int(perf_counter()))} {username}: {text}")
+        utils.logger.info(f"{timedelta(seconds=int(perf_counter()))} {username}: {text}")

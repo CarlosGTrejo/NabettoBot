@@ -9,3 +9,4 @@ def createLogger(loglvl:int, file:str=None) -> logging.Logger:
                         format=LOG_FORMAT)
     return logging.getLogger()
 
+logger = None

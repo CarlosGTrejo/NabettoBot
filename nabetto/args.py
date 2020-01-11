@@ -30,7 +30,7 @@ parser.add_argument('-d', '--debug',
     type=int,
     dest='loglvl',
     metavar='logging level',
-    choices=range(1,5),
+    choices=range(1,6),
     default=3,
     required=False)
 
