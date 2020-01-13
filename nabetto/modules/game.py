@@ -19,7 +19,7 @@ RANK_TO_NUMBER = dict(
     Challenger = 27
 )
 
-class Match:
+class Match: # TODO: Check if a player is in a match using the player object.
     @staticmethod
     def in_game():
         """Checks if there is currently a game streaming on SaltyTeemo."""

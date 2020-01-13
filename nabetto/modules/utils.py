@@ -17,6 +17,9 @@ def load_settings() -> dict:
     with open('_.json', 'r') as settings:
         return json.load(settings)
 
+def is_valid_API_key(key):
+    return bool(rKey.fullmatch(key))
+
 def save_settings(d: dict) -> bool:
     """Saves a dictionary (d) object with the settings
     configurations into the _.json file.
