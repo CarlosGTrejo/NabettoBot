@@ -15,7 +15,8 @@ def main():
         APIKEY = ARGS.key
 
         #TODO: Use ARGS.__dict__ and iterate over the args, passing it to the modules that need them.
-
+        if ARGS.save_creds: utils.save_settings()
+        
         bet_session_open = False
 
         # === Initialize logger ===
