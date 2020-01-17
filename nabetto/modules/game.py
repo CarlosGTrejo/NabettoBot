@@ -42,7 +42,7 @@ class Player:
         self._summoner = Summoner(name=name, region=region)
         self._champion = Champion(name=champion, region=region)
         self._region = region
-        self._level = kwargs['level'] if 'level' in kwargs else self._summoner.level
+        self._level = kwargs['level'] if 'level' in kwargs else self._summoner.level # TODO: Why???
         self._rank = kwargs['rank'] if 'rank' in kwargs else RANK_TO_NUMBER[str(self._summoner.ranks[queue]).replace(" ", "").replace("<", "").replace(">", "")]
         self._rank_wr = kwargs['rank_wr'] if 'rank_wr' in kwargs else -1
         self._champ_wr = kwargs['champ_wr'] if 'champ_wr' in kwargs else -1
@@ -95,3 +95,12 @@ class Player:
         except:
             utils.logger.error("Unexpected error. The default value is set to {}.".format(self._champ_mastery))
         return self._champ_mastery
+
+    def __getitem__(self, key):
+        try:
+            if str(key).isnumeric():
+                return [*self.__dict__.values()][key]
+            else:
+                return getattr(self, key)
+        except:
+            raise IndexError

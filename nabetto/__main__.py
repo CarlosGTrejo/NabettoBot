@@ -7,6 +7,8 @@ import pkg_resources
 
 def main():
     try:
+        # === Initialize logger ===
+        utils.logger = createLogger(ARGS.loglvl, file=ARGS.logpath)
         # FIXME: ARGS should detect if nabetto is being run for the first time without arguments so it can tell the user to provide username, token, api key, etc...
         SHOW_MSGS = ARGS.verbose
         USER = ARGS.user
@@ -20,8 +22,6 @@ def main():
         
         bet_session_open = False
 
-        # === Initialize logger ===
-        utils.logger = createLogger(ARGS.loglvl, file=ARGS.logpath)
         
         # Client Init
         client = Client(USER, PASS)
@@ -52,7 +52,7 @@ def main():
     except Exception as e:
         exception_message = f"[!] Exception: {e}\nInfo: {format_exc()}"
 
-        print(exception_message)
+        utils.logger.error(exception_message)
     
     # finally:
     #     print('\x1b[0m)
