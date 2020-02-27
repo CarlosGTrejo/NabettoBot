@@ -1,7 +1,8 @@
 import requests
 from cassiopeia import Summoner, Queue, Season, Champion, get_champion_mastery
 from datapipelines import common
-import nabetto.modules.utils as utils
+from web_scrape import web_scrape
+# import nabetto.modules.utils as utils
 
 season = Season.season_9
 queue = Queue.ranked_solo_fives
@@ -24,12 +25,12 @@ class Match: # TODO: Check if a player is in a match using the player object.
     def in_game():
         """Checks if there is currently a game streaming on SaltyTeemo."""
         try:
-            URL = requests.get("https://gameinfo.saltyteemo.com").url
-            region, name = URL.split('/live/')[1].split('?')[0].split('/')
+            region, name = web_scrape()
+            print(region, name)
             current_match = Summoner(name=name, region=region.upper()).current_match()
-            return current_match.duration
+            return current_match.duration # Return match duration
         except common.NotFoundError:
-            utils.logger.debug("Stream is currently not in game.")
+            # utils.logger.debug("Stream is currently not in game.")
             return -1
         
 
@@ -104,3 +105,6 @@ class Player:
                 return getattr(self, key)
         except:
             raise IndexError
+
+if __name__ == "__main__":
+    print(Match.in_game())
