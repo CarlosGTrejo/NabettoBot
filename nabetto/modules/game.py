@@ -1,11 +1,13 @@
 import requests
-from cassiopeia import Summoner, Queue, Season, Champion, get_champion_mastery
+from cassiopeia import Summoner, Queue, Season, Champion, get_champion_mastery, apply_settings, set_riot_api_key
 from datapipelines import common
 from web_scrape import web_scrape
 # import nabetto.modules.utils as utils
 
+#SETTINGS -- Temporary usage
 season = Season.season_9
 queue = Queue.ranked_solo_fives
+apply_settings(r".\cass_settings.json")
 
 RANK_TO_NUMBER = dict(
     Unranked = 0,
@@ -20,83 +22,73 @@ RANK_TO_NUMBER = dict(
     Challenger = 27
 )
 
-class Match: # TODO: Check if a player is in a match using the player object.
-    @staticmethod
-    def in_game():
+class Stream:
+    region, name = web_scrape()
+
+    @classmethod
+    def in_game(cls):
         """Checks if there is currently a game streaming on SaltyTeemo."""
         try:
-            region, name = web_scrape()
-            print(region, name)
-            current_match = Summoner(name=name, region=region.upper()).current_match()
-            return current_match.duration # Return match duration
+            current_match = Summoner(name=cls.name, region=cls.region.upper()).current_match()
+            return True
         except common.NotFoundError:
-            # utils.logger.debug("Stream is currently not in game.")
-            return -1
+            return False
+    
+    @classmethod
+    def current_match_duration(cls):
+        try:
+            current_match = Summoner(name=cls.name, region=cls.region.upper()).current_match()
+            return current_match.duration
+        except common.NotFoundError:
+            return None
+
+
+class Match: # TODO: Check if a player is in a match using the player object.
+    pass
+
+    
         
 
 class Player:
-    
-    def __init__(self, name, region, champion, **kwargs): # kwrags is used so that users don't have to remember the order
+    def __init__(self, name, region, champion): # kwrags is used so that users don't have to remember the order
         """Stores player data. If one or more fields is not filled out, 
         the constructor automatically sets default value(s) accordingly.
         _name is a mandatory """
-        self._summoner = Summoner(name=name, region=region)
-        self._champion = Champion(name=champion, region=region)
-        self._region = region
-        self._level = kwargs['level'] if 'level' in kwargs else self._summoner.level # TODO: Why???
-        self._rank = kwargs['rank'] if 'rank' in kwargs else RANK_TO_NUMBER[str(self._summoner.ranks[queue]).replace(" ", "").replace("<", "").replace(">", "")]
-        self._rank_wr = kwargs['rank_wr'] if 'rank_wr' in kwargs else -1
-        self._champ_wr = kwargs['champ_wr'] if 'champ_wr' in kwargs else -1
-        self._champ_mastery = kwargs['champ_mastery'] if 'champ_mastery' in kwargs else 0
-
-    def level(self):
-        """Returns the level of a player. 
-        False if that player does not exist."""
-        return self._level
- 
+        self.summoner = Summoner(name=name, region=region)
+        self.champion = Champion(name=champion, region=region)
+        self.region = region
+        self.level = self.summoner.level
+        self.rank =  RANK_TO_NUMBER[str(self.summoner.ranks[queue]).replace(" ", "").replace("<", "").replace(">", "")]
+        self.champ_mastery = self.champ_mastery = get_champion_mastery(champion=self.champion, summoner=self.summoner, region=self.region).points
+        self.rank_wr = 0
+        self.champ_wr = 0
     
-    def rank(self):
-        """Returns the SoloQ rank of a player."""
-        return self._rank
+    def __str__(self):
+        return "Summoner: {}\nChampion: {}\nRegion: {}\nLevel: {}\nRank: {}\nChampion WR: {}\nChampion mastery: {}\nRanked WR: {}\n".format(self.summoner, self.champion, self.region, self.level, self.rank, self.champ_wr, self.champ_mastery, self.rank_wr)
 
-    def rank_wr(self):
-        """Returns the SoloQ rank win rate of a player. 
-        -1 if that player does not exist.
-        -2 if there is no SoloQ info."""
-        summoner_soloq_entries = self._summoner.league_entries[queue]
+    def collect_rank_wr(self):
+        summoner_soloq_entries = self.summoner.league_entries[queue]
         wins = summoner_soloq_entries.wins
         losses = summoner_soloq_entries.losses
-        self._rank_wr = round((wins/(wins + losses) * 100), 1)
-            
-        if wins+losses == 0: print("This person has not played any ranked SoloQ game yet. The default value is set to -1")
-
-    def champ_wr(self, ngames=5):
+        if wins+losses == 0: 
+            print("This person has not played any ranked SoloQ game yet. The default value is set to -1") 
+            self.rank_wr = -1
+        else:
+            self.rank_wr = round((wins/(wins + losses) * 100), 1)        
+        
+    def collect_champ_wr(self, ngames=5):
         """Returns player's win rate on a specific champ on SoloQ. 
-        -1 if that player does not exist.
-        -2 if there is no SoloQ info for the specific champion."""
-        try:
-            matches = self._summoner.match_history(seasons={season}, champions={self._champion})
+        -1 if that player does not exist."""
+        if self.champ_mastery == 0:
+            self.champ_wr = -1
+        else:
+            matches = self.summoner.match_history(seasons={season}, champions={self.champion})
             wins, losses = 0, 0
             for match in matches[:ngames]:
-                if match.participants[self._summoner].stats.win: wins += 1
+                if match.participants[self.summoner].stats.win: wins += 1
                 else: losses += 1
-
-            if wins+losses == 0: print("This person has not played any ranked SoloQ game yet. The default value is set to -1")
-            else: self._rank_wr = round((wins/(wins + losses) * 100), 1)
-
-        except:
-            print("Unexpected error. The default value is set to {}%".format(self._champ_wr))
-        return self._rank_wr
-
-    def champ_mastery(self):
-        """Returns player's mastery on a specific champ. 
-        -1 if that player does not exist."""
-        try:
-            self._champ_mastery = get_champion_mastery(champion=self._champion, summoner=self._summoner, region=self._region).points
-        except:
-            utils.logger.error("Unexpected error. The default value is set to {}.".format(self._champ_mastery))
-        return self._champ_mastery
-
+            self.champ_wr = round((wins/(wins + losses) * 100), 1)
+            
     def __getitem__(self, key):
         try:
             if str(key).isnumeric():
@@ -107,4 +99,5 @@ class Player:
             raise IndexError
 
 if __name__ == "__main__":
-    print(Match.in_game())
+    print(Stream.in_game())
+    print(Stream.current_match_duration())
