@@ -18,7 +18,8 @@ def load_settings() -> dict:
         return json.load(settings)
 
 def is_valid_API_key(key):
-    return bool(rKey.fullmatch(key))
+    # return bool(rKey.fullmatch(key))
+    return True
 
 def save_settings(d: dict) -> bool:
     """Saves a dictionary (d) object with the settings
