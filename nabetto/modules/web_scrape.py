@@ -5,7 +5,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
-
+import os
 
 def web_scrape():
 
@@ -14,7 +14,7 @@ def web_scrape():
 
     # Open chrome in incognito -> access the link
     options = webdriver.ChromeOptions()
-    options.add_argument("--user-data-dir=C:\\Users\\Minh Luu\\AppData\\Local\\Google\\Chrome\\User Data")
+    options.add_argument("--user-data-dir={}\\Google\\Chrome\\User Data".format(os.getenv("LOCALAPPDATA")))
     options.add_argument("--disable-extensions")
     driver = webdriver.Chrome(executable_path=r"C:\Users\Minh Luu\Documents\GitHub\NabettoBot\chromedriver_win32\chromedriver.exe", chrome_options=options)
 
@@ -31,7 +31,7 @@ def web_scrape():
         region, name = driver.current_url.split('/live/')[1].split('?')[0].split('/')
     except IndexError:
         print("Cannot retrieve player's name and his/her server.")
-    driver.quit()
+    driver.close()
     return region, name
 
 

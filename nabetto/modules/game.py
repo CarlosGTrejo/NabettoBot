@@ -2,6 +2,7 @@ import requests
 from cassiopeia import Summoner, Queue, Season, Champion, get_champion_mastery, apply_settings, set_riot_api_key
 from datapipelines import common
 from web_scrape import web_scrape
+import datetime
 # import nabetto.modules.utils as utils
 
 #SETTINGS -- Temporary usage
@@ -22,30 +23,16 @@ RANK_TO_NUMBER = dict(
     Challenger = 27
 )
 
-class Stream:
-    region, name = web_scrape()
-
+class Stream: # TODO: Check if a player is in a match using the player object.
     @classmethod
     def in_game(cls):
         """Checks if there is currently a game streaming on SaltyTeemo."""
+        region, name = web_scrape()
         try:
-            current_match = Summoner(name=cls.name, region=cls.region.upper()).current_match()
-            return True
-        except common.NotFoundError:
-            return False
-    
-    @classmethod
-    def current_match_duration(cls):
-        try:
-            current_match = Summoner(name=cls.name, region=cls.region.upper()).current_match()
+            current_match = Summoner(name=name, region=region.upper()).current_match()
             return current_match.duration
         except common.NotFoundError:
-            return None
-
-
-class Match: # TODO: Check if a player is in a match using the player object.
-    pass
-
+            return False
     
         
 
@@ -99,5 +86,7 @@ class Player:
             raise IndexError
 
 if __name__ == "__main__":
-    print(Stream.in_game())
-    print(Stream.current_match_duration())
+    if (Stream.in_game() > datetime.time(0, 5, 0)):
+        print("True")
+    else:
+        print("False")
