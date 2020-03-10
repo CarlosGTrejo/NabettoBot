@@ -33,6 +33,11 @@ class Stream: # TODO: Check if a player is in a match using the player object.
             return current_match.duration
         except common.NotFoundError:
             return False
+
+    @classmethod
+    def players(cls):
+        """Returns a list of participants."
+        
     
         
 
@@ -86,7 +91,9 @@ class Player:
             raise IndexError
 
 if __name__ == "__main__":
-    if (Stream.in_game() > datetime.time(0, 5, 0)):
-        print("True")
-    else:
-        print("False")
+    print(Stream.in_game())
+
+    # if (Stream.in_game() > datetime.time(0, 5, 0)):
+    #     print("True")
+    # else:
+    #     print("False")
