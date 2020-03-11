@@ -1,14 +1,14 @@
 {
     "Cassiopeia": {
         "RiotAPI": {
-            "api_key": null
+            "api_key": "RIOT_API_KEY"
         },
         "logging": {
             "print_calls": false,
             "print_riot_api_key": false
         }
     },
-    "Twitch": { // TODO: figure out what the settings structure should look like and maybe verify the token layout
+    "Twitch": {
         "user": null,
         "token": null
     }

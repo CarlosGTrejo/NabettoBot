@@ -5,12 +5,6 @@ required_args = parser.add_argument_group('first-time arguments')
 
 # TODO: Check the format of the key being passed and raise an error if it's not passed correctly
 
-required_args.add_argument('-k', '--key',
-    help='Place your Riot API key after this flag',
-    type=str,
-    dest='key',
-    metavar='API key')
-
 required_args.add_argument('-u', '--user',
     help='Your Twitch username',
     type=str,
