@@ -1,9 +1,10 @@
 import socket
+from datetime import timedelta
 from threading import Timer
 from time import perf_counter
-from random import choice
-from datetime import timedelta
+
 import nabetto.modules.utils as utils
+
 
 class Client:
     """Client is used to send and retrieve messages from the SaltyTeemo Twitch chat."""

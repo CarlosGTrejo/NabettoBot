@@ -1,1 +1,4 @@
+selenium
+datapipelines
+cassiopeia
 py -m nabetto -u kato_sh -k 123 -d 1 -p
