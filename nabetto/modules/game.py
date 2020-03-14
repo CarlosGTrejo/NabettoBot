@@ -7,15 +7,14 @@ from datapipelines import common
 # import nabetto.modules.utils as utils
 # import nabetto.modules.web_scrape as web_scrape
 
-import utils
+# import utils
 from web_scrape import web_scrape
 
 # SETTINGS -- Temporary usage
 season = Season.season_9
-queue = Queue.ranked_solo_fives
-settings = utils.load_settings()
-print(settings)
-apply_settings(settings['Cassiopeia'])
+queue = None
+# settings = utils.load_settings()
+apply_settings(".\\temp.json")
 
 RANK_TO_NUMBER = dict(
     Unranked=0,
@@ -31,19 +30,6 @@ RANK_TO_NUMBER = dict(
 )
 
 
-class Stream:  # TODO: Check if a player is in a match using the player object.
-    @classmethod
-    def in_game(cls):
-        """Checks if there is currently a game streaming on SaltyTeemo."""
-        try:
-            region, name = web_scrape()
-            current_match = Summoner(
-                name=name, region=region.upper()).current_match()
-            return current_match.duration
-        except common.NotFoundError:
-            return datetime.timedelta(0)
-
-
 class Player:
     # kwrags is used so that users don't have to remember the order
     def __init__(self, name, region, champion):
@@ -54,11 +40,8 @@ class Player:
         self.champion = Champion(name=champion, region=region)
         self.region = region
         self.level = self.summoner.level
-        self.rank = RANK_TO_NUMBER[str(self.summoner.ranks[queue]).replace(
-            " ", "").replace("<", "").replace(">", "")]
-        self.champ_mastery = self.champ_mastery = get_champion_mastery(
-            champion=self.champion,
-            summoner=self.summoner, region=self.region).points
+        self.rank = RANK_TO_NUMBER[str(self.summoner.ranks[queue]).replace(" ", "").replace("<", "").replace(">", "")]
+        self.champ_mastery = get_champion_mastery(champion=self.champion, summoner=self.summoner, region=self.region).points
         self.rank_wr = 0
         self.champ_wr = 0
 
@@ -107,9 +90,58 @@ class Player:
             raise
 
 
+class Stream:  # TODO: Check if a player is in a match using the player object.
+
+    region, name = None, None
+
+    @classmethod
+    def init(cls, region, name):
+        cls.region = region.upper()
+        cls.name = name
+
+    @classmethod
+    def in_game(cls):
+        """Checks if there is currently a game streaming on SaltyTeemo."""
+        try:
+            current_match = Summoner(
+                name=cls.name, region=cls.region).current_match()
+            return current_match.duration
+        except common.NotFoundError:
+            return datetime.timedelta(0)
+
+    @classmethod
+    def check_queue(cls):
+        return Summoner(name=cls.name, region=cls.region).current_match().queue
+
+    @classmethod
+    def get_participant_data(cls):
+        """Return all participant data."""
+
+        participants_data = []
+        participants = Summoner(
+            name=cls.name, region=cls.region).current_match().participants
+        for participant in participants:
+            participant_name = participant.summoner.name
+            participant_champ = participant.champion.name
+            participants_data.append(
+                Player(participant_name, cls.region, participant_champ))
+
+        return participants_data
+
+
 if __name__ == "__main__":
-    print(ingame)
-    if (ingame.seconds / 60) > 0 and (ingame.seconds / 60) < 5:
-        print("True")
-    else:
-        print("False")
+    # region, name = web_scrape()
+    # Stream.init(region, name)
+    # ingame = Stream.in_game()
+    # print(ingame)
+    # if (ingame.seconds / 60) > 0:
+    #     queue = Stream.check_queue()
+    #     print(queue)
+    #     for participant in Stream.get_participant_data():
+    #         print(participant)
+    # else:
+    #     print("False")
+
+
+    summoner = Summoner(name="snivy2901", region="NA")
+    rank = RANK_TO_NUMBER[str(summoner.ranks[Queue.ranked_solo_fives]).replace(" ", "").replace("<", "").replace(">", "")]
