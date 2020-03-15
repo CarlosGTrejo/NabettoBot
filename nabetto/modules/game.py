@@ -48,11 +48,25 @@ class Stream:  # TODO: Check if a player is in a match using the player object.
             return False
 
 
+class Team:
+    def __init__(self, color, *args):
+        pass
+
+
 class Player:
     def __init__(self, name, region, champion):  # kwargs is used so that users don't have to remember the order
         """Stores player data. If one or more fields is not filled out, 
         the constructor automatically sets default value(s) accordingly.
-        _name is a mandatory """
+        name is a mandatory
+        instance variables:
+        summoner
+        champion
+        region
+        level
+        rank
+        champ_mastery
+        rank_wr
+        champ_wr"""
         self.summoner = Summoner(name=name, region=region)
         self.champion = Champion(name=champion, region=region)
         self.region = region
@@ -61,8 +75,6 @@ class Player:
         self.champ_mastery = get_champion_mastery(champion=self.champion,
                                                   summoner=self.summoner,
                                                   region=self.region).points
-        self.rank_wr = 0
-        self.champ_wr = 0
 
     def __str__(self):
         return f"""Summoner: {self.summoner}
@@ -74,30 +86,32 @@ class Player:
         Champion mastery: {self.champ_mastery}
         Ranked WR: {self.rank_wr}"""
 
-    def collect_rank_wr(self):
+    @property
+    def rank_wr(self):
         summoner_soloq_entries = self.summoner.league_entries[queue]
         wins = summoner_soloq_entries.wins
         losses = summoner_soloq_entries.losses
         if wins + losses == 0:
             print("This person has not played any ranked SoloQ game yet. The default value is set to -1")
-            self.rank_wr = -1
+            return -1
         else:
-            self.rank_wr = round((wins / (wins + losses) * 100), 1)
+            return round((wins / (wins + losses) * 100), 1)
 
-    def collect_champ_wr(self, ngames=5):
-        """Returns player's win rate on a specific champ on SoloQ. 
+    @property
+    def champ_wr(self):
+        """Returns player's win rate on a specific champ on SoloQ.
         -1 if that player does not exist."""
         if self.champ_mastery == 0:
-            self.champ_wr = -1
+            return -1
         else:
             matches = self.summoner.match_history(seasons={season}, champions={self.champion})
             wins, losses = 0, 0
-            for match in matches[:ngames]:
+            for match in matches[:5]:
                 if match.participants[self.summoner].stats.win:
                     wins += 1
                 else:
                     losses += 1
-            self.champ_wr = round((wins / (wins + losses) * 100), 1)
+            return round((wins / (wins + losses) * 100), 1)
 
     def __getitem__(self, key):
         try:
