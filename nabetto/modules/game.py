@@ -35,42 +35,39 @@ RANK_TO_NUMBER = dict(
     Challenger=27
 )
 
-
-class Team:
-    def __init__(self, color, *args):
-        pass
-
-
 class Stream:  # TODO: Check if a player is in a match using the player object.
 
     region, name = None, None
+    current_match = None
 
     @classmethod
-    def init(cls, region, name):
-        cls.region = region.upper()
-        cls.name = name
+    def init(cls):
+        cls.region, cls.region = web_scrape()
 
-    @classmethod
+    @property
     def in_game(cls):
         """Checks if there is currently a game streaming on SaltyTeemo."""
         try:
-            current_match = Summoner(
+            cls.current_match = Summoner(
                 name=cls.name, region=cls.region).current_match()
-            return current_match.duration
+            return True
         except common.NotFoundError:
-            return datetime.timedelta(0)
+            return False
 
-    @classmethod
-    def check_queue(cls):
-        return Summoner(name=cls.name, region=cls.region).current_match().queue
+    @property
+    def duration(cls):
+        return cls.current_match.duration if cls.in_game else datetime.timedelta(0)
+            
+    @property
+    def queue(cls):
+        return cls.current_match.queue
 
     @classmethod
     def get_participant_data(cls):
         """Return all participant data."""
 
         participants_data = []
-        participants = Summoner(
-            name=cls.name, region=cls.region).current_match().participants
+        participants = cls.current_match.participants
         for participant in participants:
             participant_name = participant.summoner.name
             participant_champ = participant.champion.name
@@ -78,6 +75,12 @@ class Stream:  # TODO: Check if a player is in a match using the player object.
                 Player(participant_name, cls.region, participant_champ))
 
         return participants_data
+
+
+class Team:
+    def __init__(self, color, *args):
+        pass
+
 
 class Player:
     # kwargs is used so that users don't have to remember the order
@@ -154,7 +157,4 @@ class Player:
 
 
 if __name__ == "__main__":
-    if Stream.in_game() > datetime.time(0, 5, 0):
-        utils.logger.debug("True")
-    else:
-        utils.logger.debug("False")
+    Stream.init()
