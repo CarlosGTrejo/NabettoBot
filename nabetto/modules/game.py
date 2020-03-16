@@ -6,10 +6,6 @@ from datapipelines import common
 import nabetto.modules.utils as utils
 import nabetto.modules.web_scrape as web_scrape
 
-# SETTINGS -- Temporary usage
-season = Season.season_9
-queue = Queue.ranked_solo_fives
-
 default_settings = {
     "RiotAPI": {
         "api_key": "RIOT_API_KEY"
@@ -21,6 +17,10 @@ default_settings = {
 }
 
 apply_settings(default_settings)
+
+# SETTINGS -- Temporary usage
+season = Season.season_9
+queue = Queue.ranked_solo_fives
 
 RANK_TO_NUMBER = dict(
     Unranked=0,
@@ -36,25 +36,52 @@ RANK_TO_NUMBER = dict(
 )
 
 
-class Stream:  # TODO: Check if a player is in a match using the player object.
-    @classmethod
-    def in_game(cls):
-        """Checks if there is currently a game streaming on SaltyTeemo."""
-        region, name = web_scrape.web_scrape()
-        try:
-            current_match = Summoner(name=name, region=region.upper()).current_match()
-            return current_match.duration
-        except common.NotFoundError:
-            return False
-
-
 class Team:
     def __init__(self, color, *args):
         pass
 
 
+class Stream:  # TODO: Check if a player is in a match using the player object.
+
+    region, name = None, None
+
+    @classmethod
+    def init(cls, region, name):
+        cls.region = region.upper()
+        cls.name = name
+
+    @classmethod
+    def in_game(cls):
+        """Checks if there is currently a game streaming on SaltyTeemo."""
+        try:
+            current_match = Summoner(
+                name=cls.name, region=cls.region).current_match()
+            return current_match.duration
+        except common.NotFoundError:
+            return datetime.timedelta(0)
+
+    @classmethod
+    def check_queue(cls):
+        return Summoner(name=cls.name, region=cls.region).current_match().queue
+
+    @classmethod
+    def get_participant_data(cls):
+        """Return all participant data."""
+
+        participants_data = []
+        participants = Summoner(
+            name=cls.name, region=cls.region).current_match().participants
+        for participant in participants:
+            participant_name = participant.summoner.name
+            participant_champ = participant.champion.name
+            participants_data.append(
+                Player(participant_name, cls.region, participant_champ))
+
+        return participants_data
+
 class Player:
-    def __init__(self, name, region, champion):  # kwargs is used so that users don't have to remember the order
+    # kwargs is used so that users don't have to remember the order
+    def __init__(self, name, region, champion):
         """Stores player data. If one or more fields is not filled out, 
         the constructor automatically sets default value(s) accordingly.
         name is a mandatory
@@ -71,7 +98,8 @@ class Player:
         self.champion = Champion(name=champion, region=region)
         self.region = region
         self.level = self.summoner.level
-        self.rank = RANK_TO_NUMBER[str(self.summoner.ranks[queue]).replace(" ", "").replace("<", "").replace(">", "")]
+        self.rank = RANK_TO_NUMBER[str(self.summoner.ranks[queue]).replace(
+            " ", "").replace("<", "").replace(">", "")]
         self.champ_mastery = get_champion_mastery(champion=self.champion,
                                                   summoner=self.summoner,
                                                   region=self.region).points
@@ -92,7 +120,8 @@ class Player:
         wins = summoner_soloq_entries.wins
         losses = summoner_soloq_entries.losses
         if wins + losses == 0:
-            print("This person has not played any ranked SoloQ game yet. The default value is set to -1")
+            print(
+                "This person has not played any ranked SoloQ game yet. The default value is set to -1")
             return -1
         else:
             return round((wins / (wins + losses) * 100), 1)
@@ -104,7 +133,8 @@ class Player:
         if self.champ_mastery == 0:
             return -1
         else:
-            matches = self.summoner.match_history(seasons={season}, champions={self.champion})
+            matches = self.summoner.match_history(
+                seasons={season}, champions={self.champion})
             wins, losses = 0, 0
             for match in matches[:5]:
                 if match.participants[self.summoner].stats.win:
