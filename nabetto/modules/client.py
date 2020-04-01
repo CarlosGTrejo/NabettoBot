@@ -10,8 +10,8 @@ class Client:
     """Client is used to send and retrieve messages from the SaltyTeemo Twitch chat."""
 
     def __init__(self, USER, PASS):
-        TOKEN =   bytes("PASS " + PASS.strip() + "\r\n", 'utf-8')
-        NICK =    bytes("NICK " + USER + "\r\n", 'utf-8')
+        TOKEN = bytes("PASS " + PASS.strip() + "\r\n", 'utf-8')
+        NICK = bytes("NICK " + USER + "\r\n", 'utf-8')
         CHANNEL = bytes("JOIN #saltyteemo\r\n", 'utf-8')
         self.sock = socket.socket()
         self.messages = []
@@ -19,12 +19,12 @@ class Client:
 
         # Open Connection
         self.sock.connect(("irc.twitch.tv", 6667))
-        self.sock.send(TOKEN); self.sock.send(NICK) # log in
-        self.sock.send(CHANNEL) # Request to join Saltyteemo
+        self.sock.send(TOKEN)
+        self.sock.send(NICK)  # log in
+        self.sock.send(CHANNEL)  # Request to join Saltyteemo
 
-
-        Loading = True
-        while Loading:
+        loading = True
+        while loading:
             self.buffer += self.sock.recv(1024).decode()
             tmp = self.buffer.split("\n")
             self.buffer = tmp.pop()
@@ -32,11 +32,10 @@ class Client:
             for line in tmp:
                 utils.logger.debug(f'(i) {line}')
 
-                if ("End of /NAMES list" in line):
-                    utils.logger.info(" [+] Successfully joined channel. ".center(70,'='))
+                if "End of /NAMES list" in line:
+                    utils.logger.info(" [+] Successfully joined channel. ".center(70, '='))
                     self.buffer = ""
-                    Loading = False
-
+                    loading = False
 
     def fetchMessages(self) -> None:
         """Messages are retrieved from the server and stored inside the Client.messages attribute
@@ -49,7 +48,7 @@ class Client:
         self.buffer = tmp.pop()
         self.messages = tmp
 
-    def sendMessage(self, msg:str) -> None:
+    def sendMessage(self, msg: str) -> None:
         """Sends a message to the server"""
         envelope = ("PRIVMSG #saltyteemo :" + msg + "\r\n").encode()
         self.sock.send(envelope)
@@ -60,17 +59,18 @@ class Client:
         FARM = ("PRIVMSG #saltyteemo :!farm\r\n").encode()
         self.sock.send(FARM)
         farm_thread = Timer(3600, self.farm, [self])
-        farm_thread.daemon = True; farm_thread.start()
-        utils.logger.info("(i) Farmed mushrooms\t\n".center(31,'\t'))
+        farm_thread.daemon = True;
+        farm_thread.start()
+        utils.logger.info("(i) Farmed mushrooms\t\n".center(31, '\t'))
 
-    def CheckPINGPONG(self,msg):
+    def CheckPINGPONG(self, msg):
         """Replies to PING messages with proper PONG"""
         if (":tmi.twitch.tv" in msg) and ("PING" in msg):
-            utils.logger.debug("\n  [O] Ping Received\t\n".center(28,'\t'))
+            utils.logger.debug("\n  [O] Ping Received\t\n".center(28, '\t'))
             self.sock.send("PONG :tmi.twitch.tv\r\n".encode())
-            utils.logger.debug("\n  [@] PONG Sent\t\t\n".center(25,'\t'))
-    
-    def display(self,msg) -> None:
+            utils.logger.debug("\n  [@] PONG Sent\t\t\n".center(25, '\t'))
+
+    def display(self, msg) -> None:
         """Prints colorful messages and formats them in human readable format"""
         utils.logger.debug(f'display({msg})')
         if (":tmi.twitch.tv" in msg) and ("PING" in msg):

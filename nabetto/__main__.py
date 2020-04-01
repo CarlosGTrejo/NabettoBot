@@ -52,10 +52,6 @@ def main():
 
         utils.logger.error(exception_message)
 
-    # finally:
-    #     print('\x1b[0m)
-    #     deinit()
-
 
 if __name__ == "__main__":
     main()

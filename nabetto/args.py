@@ -9,7 +9,7 @@ required_args.add_argument('-u', '--user',
                            dest='user',
                            metavar='username')
 
-required_args.add_argument('-p', '--passwd',
+required_args.add_argument('-t', '--token',
                            help='Your Twitch Oath Token',
                            type=str,
                            dest='passwd',
@@ -30,8 +30,8 @@ parser.add_argument('-f', '--file',
                     metavar='file',
                     default=None)
 
-parser.add_argument('-v', '--verbose',
-                    help='Displays all messages',
+parser.add_argument('-c', '--chat',
+                    help='Displays Twitch chat messages',
                     action='store_true')
 
 parser.add_argument('-s', '--save',

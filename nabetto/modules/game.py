@@ -49,8 +49,16 @@ class Stream:  # TODO: Check if a player is in a match using the player object.
 
 
 class Team:
-    def __init__(self, color, *args):
-        pass
+    def __init__(self, players: tuple, color: str, *args):
+        if color.lower not in ("red", "blue"):
+            raise ValueError(f"color must be 'RED' or 'BLUE', not {color}")
+        if not isinstance(players, (tuple, list)):
+            raise TypeError(f"Argument players must be list or tuple, not {type(players)}")
+        if len(players) != 5:
+            raise ValueError(f"There must be 5 players in each team, not {len(players)}")
+
+        self.players = players
+        self.color = color.upper()
 
 
 class Player:
@@ -92,7 +100,7 @@ class Player:
         wins = summoner_soloq_entries.wins
         losses = summoner_soloq_entries.losses
         if wins + losses == 0:
-            print("This person has not played any ranked SoloQ game yet. The default value is set to -1")
+            # This person has not played any ranked SoloQ game yet. The default value is set to -1
             return -1
         else:
             return round((wins / (wins + losses) * 100), 1)
@@ -124,6 +132,7 @@ class Player:
 
 
 if __name__ == "__main__":
+    utils.logger = utils.createLogger(1)
     if Stream.in_game() > datetime.time(0, 5, 0):
         utils.logger.debug("True")
     else:
