@@ -17,10 +17,17 @@ def createLogger(log_level: int, file: str = None) -> logging.Logger:
     return logging.getLogger()
 
 
-def gather(red_team, blue_team, match_id: int, winner=None):
+def build_entry(player):
+    match = player.current_match()
+    match_data = match.to_dict()
+    entry = dict()
+    entry['match_id'] = match_data['id']
+
+
+def save_entry(match_id: int, participants: dict, winner=None):
     """Saves the player object attributes to a csv file"""
-    if type(red_team).__name__ != "Team" and type(blue_team).__name__ != "Team":
-        raise TypeError("Arguments 'red_team' and 'blue_team' must be of type 'Team'")
+    if not isinstance(participants, dict):
+        raise TypeError(f"Argument 'participants' must be of type 'dict' not {type(participants).__name__}")
     if not isinstance(match_id, int):
         raise TypeError(f"'match_id' must be int not {type(match_id)}")
     if match_id <= 0:
@@ -30,5 +37,5 @@ def gather(red_team, blue_team, match_id: int, winner=None):
     with open('data.csv', mode='a') as f:
         data_writer = csv.writer(f)
         if not file_exists:
-            data_writer.writerow(['match_id', 'red', 'blue', 'winner'])
-        data_writer.writerow([match_id, red_team, blue_team, winner])
+            data_writer.writerow(['match_id', 'participants', 'winner'])
+        data_writer.writerow([match_id, participants, winner])
